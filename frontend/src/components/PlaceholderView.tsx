@@ -21,46 +21,50 @@ export const PlaceholderView: React.FC<PlaceholderViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-6 rounded-xl border border-slate-800 bg-slate-900/50 backdrop-blur-md">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-5 rounded-xl mech-panel border-slate-800 tech-bracket">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-xl bg-cyan-950/60 border border-cyan-800/40 text-cyan-400">
-            <Icon className="w-8 h-8" />
+          <div className="p-3 rounded-xl bg-slate-900 border border-slate-700/80 text-cyan-400 shrink-0 shadow-inner">
+            <Icon className="w-7 h-7" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-xl font-bold text-slate-100 font-mono tracking-wide">{title}</h2>
-              <StatusBadge label={phase} variant="info" pulse={false} />
+            <div className="flex items-center gap-2.5">
+              <h2 className="text-xl font-bold text-slate-100 font-mono tracking-wide uppercase">
+                {title}
+              </h2>
+              <StatusBadge label={phase} variant="laser" pulse={false} size="sm" />
             </div>
-            <p className="text-sm text-slate-400 mt-1">{description}</p>
+            <p className="text-xs text-slate-400 mt-1 font-mono">{description}</p>
           </div>
         </div>
       </div>
 
       {/* Specification / Planned Implementation Card */}
       <Card
-        title="Implementation Status: Coming Soon"
-        subtitle="This module is scheduled for future project phases."
+        title="Subsystem Architecture & Capabilities"
+        subtitle="Hardware abstraction layer and scheduled implementation capabilities"
+        tag="SCHEDULED"
         icon={Icon}
-        badge={<span className="text-xs font-mono text-cyan-400">Scheduled: {phase}</span>}
+        badge={<span className="text-xs font-mono text-cyan-400 font-bold">{phase}</span>}
+        techBracket={true}
       >
-        <div className="space-y-4">
-          <p className="text-sm text-slate-300 leading-relaxed">
-            In accordance with Step 1 requirements, this subsystem is currently staged in standby mode.
-            Project scaffolding and baseline communication infrastructure have been initialized.
+        <div className="space-y-4 font-mono">
+          <p className="text-xs text-slate-300 font-sans leading-relaxed">
+            In accordance with the <strong>Step 1</strong> boundaries, this subsystem is currently staged in standby mode.
+            Project scaffolding, routing paths, typed schemas, and communication bridges have been initialized.
           </p>
 
           <div className="pt-2">
-            <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold mb-3">
-              Planned Capabilities in Future Steps:
+            <h4 className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold mb-3">
+              PLANNED CAPABILITIES & INTERFACES:
             </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
               {plannedFeatures.map((feat, idx) => (
                 <div
                   key={idx}
-                  className="flex items-start gap-2.5 p-3 rounded-lg border border-slate-800/80 bg-slate-950/40 text-xs text-slate-300"
+                  className="flex items-start gap-2.5 p-3 rounded-lg border border-slate-800/80 bg-[#06080e] text-xs text-slate-300 transition-colors hover:border-slate-700"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-1.5 shrink-0" />
-                  <span>{feat}</span>
+                  <span className="font-sans text-xs">{feat}</span>
                 </div>
               ))}
             </div>

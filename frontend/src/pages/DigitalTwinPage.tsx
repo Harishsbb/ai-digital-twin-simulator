@@ -1,108 +1,115 @@
-import React, { useRef, useState } from 'react'
-import { MotorScene, type MotorSceneHandle } from '../components/twin/MotorScene'
-import { TwinControls } from '../components/twin/TwinControls'
-import { MachineInfoPanel } from '../components/twin/MachineInfoPanel'
-import { MachineStatusBadge } from '../components/twin/MachineStatusBadge'
-import { ControlHelpPanel } from '../components/twin/ControlHelpPanel'
+import React, { useState } from 'react'
+import { Box, Clock, Wifi } from 'lucide-react'
+import { MotorViewportCard } from '../components/twin/MotorViewportCard'
+import { MachineStatusCard } from '../components/twin/MachineStatusCard'
+import { MachineInformationCard } from '../components/twin/MachineInformationCard'
+import { StatusSelectorCard } from '../components/twin/StatusSelectorCard'
+import { ControlsHelpCard } from '../components/twin/ControlsHelpCard'
 import type { TwinViewOptions, TwinVisualStatus } from '../types'
 
 export const DigitalTwinPage: React.FC = () => {
-  const sceneRef = useRef<MotorSceneHandle>(null)
-
-  // Machine Status State (Local manual switcher for Step 2)
+  // Machine Status State (Normal / Warning / Critical)
   const [status, setStatus] = useState<TwinVisualStatus>('Normal')
 
   // Selected Component for detailed inspection
-  const [selectedComponent, setSelectedComponent] = useState<string | null>('de-bearing')
+  const [, setSelectedComponent] = useState<string | null>('de-bearing')
 
-  // 3D View Options
+  // 3D Viewport Options
   const [options, setOptions] = useState<TwinViewOptions>({
-    autoRotate: true,
+    autoRotate: false,
     wireframe: false,
     showSensors: true,
     explodedView: false,
     rotationSpeed: 1.0,
   })
 
-  const handleResetCamera = () => {
-    sceneRef.current?.resetCamera()
-  }
-
   return (
     <div className="space-y-6">
-      {/* 1. Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-5 rounded-xl mech-panel">
-        <div>
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-stone-100 text-stone-700 border border-stone-200 font-semibold tracking-wider">
-              CAD DIGITAL TWIN // 3D VIEWPORT
-            </span>
-            <span className="text-stone-400 font-mono text-xs">ASSET // MTR-IND-150KW-01</span>
+      {/* ========================================================= */}
+      {/* 1. PAGE HEADER & STATUS METRICS (Matching Reference)      */}
+      {/* ========================================================= */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+        {/* Left: Cube Icon & Title Block */}
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-[#132238] border border-blue-500/30 flex items-center justify-center text-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.15)] shrink-0 mt-0.5">
+            <Box className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold font-mono tracking-tight text-stone-900 uppercase">
-            Digital Twin
-          </h2>
-          <p className="text-xs text-stone-500 font-mono mt-0.5">
-            Interactive Industrial Motor Simulation
-          </p>
+
+          <div>
+            <h1 className="text-2xl font-bold text-white tracking-tight">
+              Digital Twin
+            </h1>
+            <div className="text-sm text-slate-300 font-medium mt-0.5">
+              Interactive Industrial Motor Simulation
+            </div>
+            <p className="text-xs text-slate-400 mt-1">
+              Explore the 3D model, view machine details and change the status to see visual behavior.
+            </p>
+          </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <MachineStatusBadge status={status} size="md" />
+        {/* Right: Quick Telemetry Status Pills */}
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Connected / Virtual Machine */}
+          <div className="flex items-center gap-3 px-4 py-3 rounded-2xl dark-panel shadow-md">
+            <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+              <Wifi className="w-4 h-4" />
+            </div>
+            <div className="leading-tight">
+              <div className="text-xs font-semibold text-white">Connected</div>
+              <div className="text-[11px] text-slate-400">Virtual Machine</div>
+            </div>
+          </div>
+
+          {/* Last Updated Timestamp */}
+          <div className="flex items-center gap-3 px-4 py-3 rounded-2xl dark-panel shadow-md">
+            <div className="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-700/80 flex items-center justify-center text-slate-300 shrink-0">
+              <Clock className="w-4 h-4" />
+            </div>
+            <div className="leading-tight">
+              <div className="text-[11px] text-slate-400">Last Updated</div>
+              <div className="text-xs font-semibold text-white">Jun 23, 2025 10:24 AM</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* 2. Main 3D Viewport & Side Information Grid */}
+      {/* ========================================================= */}
+      {/* 2. MAIN 3D MOTOR VIEWPORT & MACHINE METRICS               */}
+      {/* ========================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left: 3D Viewport & Controls (8 cols on lg) */}
-        <div className="lg:col-span-8 space-y-4">
-          {/* 3D Canvas Box */}
-          <div className="relative rounded-xl border border-stone-300 bg-white shadow-xs overflow-hidden h-[480px] sm:h-[540px] md:h-[600px] tech-bracket">
-            {/* Viewport Top HUD Overlay */}
-            <div className="absolute top-3 left-3 z-10 flex items-center gap-2 pointer-events-none">
-              <span className="text-[10px] font-mono font-bold px-2 py-1 rounded bg-white/90 backdrop-blur-md text-stone-800 border border-stone-200 shadow-2xs">
-                WebGL 2.0 // THREE.JS
-              </span>
-              <span className="text-[10px] font-mono px-2 py-1 rounded bg-white/90 backdrop-blur-md text-stone-600 border border-stone-200 shadow-2xs">
-                FPS: 60 (OPTIMAL)
-              </span>
-            </div>
-
-            {/* 3D Scene */}
-            <MotorScene
-              ref={sceneRef}
-              status={status}
-              options={options}
-              onSelectComponent={(compId) => setSelectedComponent(compId)}
-            />
-
-            {/* Viewport Floating Status Indicator Pill */}
-            <div className="absolute bottom-3 right-3 z-10 pointer-events-none">
-              <span className="text-[10px] font-mono px-2 py-1 rounded bg-white/90 backdrop-blur-md text-stone-700 border border-stone-200 shadow-2xs">
-                MODE: {options.explodedView ? 'EXPLODED VIEW' : options.wireframe ? 'WIREFRAME' : 'SURFACE RENDER'}
-              </span>
-            </div>
-          </div>
-
-          {/* Interactive Controls Bar */}
-          <TwinControls
+        {/* Left (8 cols): 3D Motor View Centerpiece */}
+        <div className="lg:col-span-8">
+          <MotorViewportCard
             status={status}
             options={options}
-            onChangeStatus={(newStatus) => setStatus(newStatus)}
             onOptionsChange={setOptions}
-            onResetCamera={handleResetCamera}
+            onSelectComponent={(id) => setSelectedComponent(id)}
           />
-
-          {/* Mouse & Touch Controls Guide */}
-          <ControlHelpPanel />
         </div>
 
-        {/* Right: Machine Info Panel (4 cols on lg) */}
-        <div className="lg:col-span-4">
-          <MachineInfoPanel
+        {/* Right (4 cols): Machine Status & Machine Information */}
+        <div className="lg:col-span-4 space-y-6">
+          <MachineStatusCard status={status} />
+          <MachineInformationCard />
+        </div>
+      </div>
+
+      {/* ========================================================= */}
+      {/* 3. BOTTOM CARDS: STATUS TESTER & CONTROLS HELP            */}
+      {/* ========================================================= */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        {/* Bottom Left (6 cols): Change Machine Status (Test) */}
+        <div className="lg:col-span-6">
+          <StatusSelectorCard
             status={status}
-            selectedComponent={selectedComponent}
+            onChangeStatus={(s) => setStatus(s)}
           />
+        </div>
+
+        {/* Bottom Right (6 cols): Controls & Navigation */}
+        <div className="lg:col-span-6">
+          <ControlsHelpCard />
         </div>
       </div>
     </div>

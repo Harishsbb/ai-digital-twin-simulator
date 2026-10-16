@@ -11,7 +11,6 @@ interface CardProps {
   children: React.ReactNode
   className?: string
   headerClassName?: string
-  techBracket?: boolean
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -24,39 +23,36 @@ export const Card: React.FC<CardProps> = ({
   children,
   className = '',
   headerClassName = '',
-  techBracket = false,
 }) => {
   return (
     <div
-      className={`relative rounded-xl mech-panel p-5 transition-all duration-200 ${
-        techBracket ? 'tech-bracket' : ''
-      } ${className}`}
+      className={`relative rounded-2xl dark-panel p-6 shadow-xl transition-all duration-200 ${className}`}
     >
       {(title || Icon || action || badge || tag) && (
         <div
-          className={`flex items-start justify-between gap-3 pb-3 border-b border-stone-100 mb-4 ${headerClassName}`}
+          className={`flex items-start justify-between gap-3 pb-3.5 border-b border-slate-800/70 mb-4 ${headerClassName}`}
         >
           <div className="flex items-center gap-3 min-w-0">
             {Icon && (
-              <div className="p-2 rounded-lg bg-stone-50 border border-stone-200/80 text-stone-700 shrink-0 shadow-2xs">
+              <div className="w-8 h-8 rounded-xl bg-blue-600/10 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0 shadow-[0_0_12px_rgba(59,130,246,0.15)]">
                 <Icon className="w-4 h-4" />
               </div>
             )}
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 {tag && (
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-stone-700 font-semibold bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-blue-400 font-semibold bg-blue-950/60 px-1.5 py-0.5 rounded border border-blue-800/40">
                     {tag}
                   </span>
                 )}
                 {title && (
-                  <h3 className="text-xs font-semibold text-stone-900 tracking-wider uppercase font-mono truncate">
+                  <h3 className="text-sm font-semibold text-white tracking-wide truncate">
                     {title}
                   </h3>
                 )}
               </div>
               {subtitle && (
-                <p className="text-[11px] text-stone-500 mt-0.5 line-clamp-1">
+                <p className="text-xs text-slate-400 mt-0.5 line-clamp-1">
                   {subtitle}
                 </p>
               )}

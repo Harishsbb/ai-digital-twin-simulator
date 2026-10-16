@@ -36,3 +36,23 @@ export interface MachineMetadata {
   status: MachineStatus
   facilityLocation: string
 }
+
+// 3D Digital Twin Visualizer Types (Step 2)
+export type TwinVisualStatus = 'Normal' | 'Warning' | 'Critical'
+
+export interface TwinViewOptions {
+  autoRotate: boolean
+  wireframe: boolean
+  showSensors: boolean
+  explodedView: boolean
+  rotationSpeed: number
+}
+
+export interface TwinComponentInfo {
+  id: string
+  name: string
+  code: string
+  description: string
+  status: TwinVisualStatus
+  nominalSpec: string
+}

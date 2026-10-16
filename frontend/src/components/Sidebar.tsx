@@ -40,7 +40,7 @@ const navSections: NavSection[] = [
         name: 'Digital Twin',
         path: '/digital-twin',
         icon: Box,
-        badge: 'PHASE 3',
+        badge: 'STEP 2',
         description: '3D spatial WebGL motor viewport',
       },
       {

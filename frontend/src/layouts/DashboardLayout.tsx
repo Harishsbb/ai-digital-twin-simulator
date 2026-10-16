@@ -9,7 +9,7 @@ export const DashboardLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
 
   return (
-    <div className="min-h-screen bg-[#07090e] text-slate-100 flex flex-col drafting-grid">
+    <div className="min-h-screen bg-[#fbfaf6] text-stone-900 flex flex-col drafting-grid">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main Container offset for desktop sidebar */}
@@ -20,15 +20,15 @@ export const DashboardLayout: React.FC = () => {
           <Outlet />
         </main>
 
-        <footer className="py-3 px-6 border-t border-slate-800/80 bg-[#07090e]/80 text-xs text-slate-400 font-mono flex flex-col sm:flex-row items-center justify-between gap-2">
+        <footer className="py-3 px-6 border-t border-stone-200/90 bg-[#fbfaf6]/80 text-xs text-stone-500 font-mono flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
             <span>AI DIGITAL TWIN // INDUSTRIAL MOTOR TELEMETRY PLATFORM</span>
           </div>
-          <div className="flex items-center gap-4 text-[11px] text-slate-400">
+          <div className="flex items-center gap-4 text-[11px] text-stone-400">
             <span>VERSION 0.1.0-DEV</span>
             <span>&copy; {CURRENT_YEAR}</span>
-            <span className="text-cyan-400 font-semibold">STAGE 1 // PROJECT SETUP</span>
+            <span className="text-stone-900 font-semibold">STAGE 1 // PROJECT SETUP</span>
           </div>
         </footer>
       </div>

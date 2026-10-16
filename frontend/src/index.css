@@ -10,8 +10,8 @@
 
   body {
     font-family: var(--font-sans);
-    background-color: #07090e;
-    color: #e2e8f0;
+    background-color: #fbfaf6;
+    color: #1c1917;
     overflow-x: hidden;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
@@ -30,50 +30,49 @@
     font-family: var(--font-tech);
   }
 
-  /* Micro subtle scrollbar */
+  /* Refined minimal scrollbar */
   ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #090c13;
+    background: #f5f4ef;
   }
   ::-webkit-scrollbar-thumb {
-    background: #1e2638;
-    border-radius: 2px;
+    background: #d6d3d1;
+    border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #2f3c56;
+    background: #a8a29e;
   }
 }
 
-/* Taste Skill Industrial Grid: subtle 24px precision drafting grid */
+/* Taste Skill Light Editorial Grid: warm architectural drafting sheet */
 .drafting-grid {
   background-image: 
-    radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.08) 0%, transparent 60%),
-    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    radial-gradient(circle at 50% 0%, rgba(2, 132, 199, 0.03) 0%, transparent 50%),
+    linear-gradient(to right, rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
   background-size: 100% 100%, 32px 32px, 32px 32px;
 }
 
-/* Mechanical card border with subtle specular edge */
+/* Mechanical card panel: crisp paper white with subtle border and layered elevation */
 .mech-panel {
-  background: linear-gradient(180deg, rgba(17, 24, 39, 0.7) 0%, rgba(11, 15, 25, 0.85) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1px solid #e7e5e0;
   box-shadow: 
-    0 4px 20px -2px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+    0 1px 3px 0 rgba(0, 0, 0, 0.04),
+    0 1px 2px -1px rgba(0, 0, 0, 0.03);
 }
 
 .mech-panel:hover {
-  border-color: rgba(0, 240, 255, 0.25);
+  border-color: #d1cfc7;
   box-shadow: 
-    0 8px 30px -4px rgba(0, 0, 0, 0.6),
-    0 0 15px -3px rgba(0, 240, 255, 0.08),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+    0 4px 12px -2px rgba(0, 0, 0, 0.06),
+    0 2px 4px -2px rgba(0, 0, 0, 0.03);
 }
 
-/* Technical corner crosshairs */
+/* Technical corner crosshairs for light mode */
 .tech-bracket {
   position: relative;
 }
@@ -84,8 +83,8 @@
   left: -1px;
   width: 6px;
   height: 6px;
-  border-top: 2px solid rgba(0, 240, 255, 0.5);
-  border-left: 2px solid rgba(0, 240, 255, 0.5);
+  border-top: 2px solid #0284c7;
+  border-left: 2px solid #0284c7;
 }
 .tech-bracket::after {
   content: '';
@@ -94,16 +93,6 @@
   right: -1px;
   width: 6px;
   height: 6px;
-  border-bottom: 2px solid rgba(0, 240, 255, 0.5);
-  border-right: 2px solid rgba(0, 240, 255, 0.5);
-}
-
-/* Scanner line animation for asset viewport */
-@keyframes scanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(1000%); }
-}
-
-.animate-scanline {
-  animation: scanline 8s linear infinite;
+  border-bottom: 2px solid #0284c7;
+  border-right: 2px solid #0284c7;
 }

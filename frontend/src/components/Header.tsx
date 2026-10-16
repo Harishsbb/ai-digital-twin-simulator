@@ -83,12 +83,12 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   }, [])
 
   return (
-    <header className="h-16 border-b border-slate-800/80 bg-[#090c13]/90 backdrop-blur-xl px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30">
+    <header className="h-16 border-b border-stone-200/90 bg-white/95 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shadow-2xs">
       {/* Left: Mobile Toggle & Industrial Unit Tag */}
       <div className="flex items-center gap-3.5">
         <button
           onClick={onToggleSidebar}
-          className="lg:hidden p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-100 transition-colors"
+          className="lg:hidden p-2 rounded-lg bg-stone-100 border border-stone-200 text-stone-600 hover:text-stone-900 transition-colors"
           title="Toggle Navigation Menu"
           aria-label="Toggle Navigation Menu"
         >
@@ -96,22 +96,21 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
         </button>
 
         <div className="flex items-center gap-3">
-          <div className="relative w-9 h-9 rounded-lg bg-gradient-to-b from-slate-800 to-slate-900 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-md shadow-cyan-950/20 group">
-            <Cpu className="w-5 h-5 transition-transform group-hover:scale-110" />
-            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-cyan-400 animate-ping opacity-75" />
-            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-cyan-400" />
+          <div className="relative w-9 h-9 rounded-lg bg-stone-900 border border-stone-800 flex items-center justify-center text-white shadow-2xs group">
+            <Cpu className="w-5 h-5 transition-transform group-hover:scale-105" />
+            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white" />
           </div>
 
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xs sm:text-sm font-bold tracking-wider text-slate-100 uppercase font-mono">
+              <h1 className="text-xs sm:text-sm font-bold tracking-wider text-stone-900 uppercase font-mono">
                 AI Digital Twin
               </h1>
-              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-cyan-950/80 text-cyan-400 border border-cyan-700/50">
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-stone-100 text-stone-700 border border-stone-200 font-semibold">
                 STEP-1 // CORE
               </span>
             </div>
-            <p className="text-[10px] text-slate-400 font-mono tracking-tight hidden sm:block">
+            <p className="text-[10px] text-stone-500 font-mono tracking-tight hidden sm:block">
               INDUSTRIAL MOTOR TELEMETRY STATION
             </p>
           </div>
@@ -119,18 +118,18 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
       </div>
 
       {/* Center: Realtime Asset & Station Telecode */}
-      <div className="hidden lg:flex items-center gap-3 px-3.5 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800/80 text-xs font-mono">
-        <div className="flex items-center gap-1.5 text-slate-400">
-          <Activity className="w-3.5 h-3.5 text-cyan-400" />
-          <span className="text-slate-500">ASSET:</span>
-          <span className="font-semibold text-slate-200">MTR-150KW-SIMOTICS</span>
+      <div className="hidden lg:flex items-center gap-3 px-3.5 py-1.5 rounded-lg bg-stone-50 border border-stone-200/90 text-xs font-mono">
+        <div className="flex items-center gap-1.5 text-stone-600">
+          <Activity className="w-3.5 h-3.5 text-stone-700" />
+          <span className="text-stone-400">ASSET:</span>
+          <span className="font-semibold text-stone-900">MTR-150KW-SIMOTICS</span>
         </div>
-        <div className="h-3 w-[1px] bg-slate-800" />
-        <div className="text-[11px] text-slate-400">
-          <span className="text-slate-500">DUTY:</span> S1 CONT
+        <div className="h-3 w-[1px] bg-stone-200" />
+        <div className="text-[11px] text-stone-600">
+          <span className="text-stone-400">DUTY:</span> S1 CONT
         </div>
-        <div className="h-3 w-[1px] bg-slate-800" />
-        <div className="text-[11px] text-cyan-400 font-mono font-medium">
+        <div className="h-3 w-[1px] bg-stone-200" />
+        <div className="text-[11px] text-stone-700 font-mono font-medium">
           {utcTime || '16:00:00 UTC'}
         </div>
       </div>
@@ -148,18 +147,18 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
                 }) - Latency: ${latencyMs ?? '--'}ms`
               : 'Backend API Offline. Click to reconnect.'
           }
-          className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[11px] font-mono border transition-all ${
+          className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[11px] font-mono border transition-all shadow-2xs ${
             connected
-              ? 'bg-emerald-950/40 text-emerald-300 border-emerald-800/50 hover:bg-emerald-900/40'
+              ? 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
               : connected === false
-              ? 'bg-rose-950/40 text-rose-300 border-rose-800/50 hover:bg-rose-900/40'
-              : 'bg-slate-900 text-slate-400 border-slate-800'
+              ? 'bg-rose-50 text-rose-800 border-rose-200 hover:bg-rose-100'
+              : 'bg-stone-100 text-stone-700 border-stone-200'
           }`}
         >
           {connected ? (
-            <Wifi className="w-3.5 h-3.5 text-emerald-400" />
+            <Wifi className="w-3.5 h-3.5 text-emerald-600" />
           ) : (
-            <WifiOff className="w-3.5 h-3.5 text-rose-400" />
+            <WifiOff className="w-3.5 h-3.5 text-rose-600" />
           )}
 
           <div className="flex items-center gap-1.5">
@@ -167,47 +166,47 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
               {connected ? 'API BUS' : 'BUS OFFLINE'}
             </span>
             {latencyMs !== null && connected && (
-              <span className="text-[10px] text-emerald-400 font-bold bg-emerald-950 px-1 py-0.2 rounded border border-emerald-800/60">
+              <span className="text-[10px] text-emerald-800 font-bold bg-white px-1 py-0.5 rounded border border-emerald-300">
                 {latencyMs}ms
               </span>
             )}
           </div>
 
           <RefreshCw
-            className={`w-3 h-3 text-slate-400 hover:text-slate-200 ${
-              isChecking ? 'animate-spin text-cyan-400' : ''
+            className={`w-3 h-3 text-stone-500 hover:text-stone-800 ${
+              isChecking ? 'animate-spin text-stone-900' : ''
             }`}
           />
         </button>
 
         {/* Machine Alert Standby Status */}
         <div className="hidden md:flex items-center">
-          <StatusBadge label="STANDBY" variant="info" pulse={false} size="sm" />
+          <StatusBadge label="STANDBY" variant="neutral" pulse={false} size="sm" />
         </div>
 
         {/* Notifications */}
         <button
-          className="relative p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 transition-colors"
+          className="relative p-2 rounded-lg bg-stone-50 border border-stone-200 text-stone-600 hover:text-stone-900 transition-colors shadow-2xs"
           title="Telemetry Bus Notifications (All Clear)"
           aria-label="Notifications"
         >
           <Bell className="w-4 h-4" />
-          <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-cyan-400" />
+          <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-stone-900" />
         </button>
 
         {/* Operator Profile */}
-        <div className="flex items-center gap-2 pl-2 border-l border-slate-800">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-slate-900 to-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 shadow-sm">
-            <User className="w-4 h-4 text-cyan-400" />
+        <div className="flex items-center gap-2 pl-2 border-l border-stone-200">
+          <div className="w-8 h-8 rounded-lg bg-stone-900 border border-stone-800 flex items-center justify-center text-white shadow-2xs">
+            <User className="w-4 h-4" />
           </div>
           <div className="hidden xl:block text-left leading-tight">
             <div className="flex items-center gap-1.5">
-              <span className="text-xs font-semibold text-slate-200 font-mono">
+              <span className="text-xs font-semibold text-stone-900 font-mono">
                 DR. S. VANCE
               </span>
-              <Shield className="w-3 h-3 text-cyan-400" />
+              <Shield className="w-3 h-3 text-stone-500" />
             </div>
-            <p className="text-[9px] text-slate-400 font-mono tracking-wider uppercase">
+            <p className="text-[9px] text-stone-400 font-mono tracking-wider uppercase">
               LEAD RELIABILITY ENG
             </p>
           </div>

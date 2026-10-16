@@ -19,49 +19,43 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
 }) => {
   const variantStyles: Record<
     BadgeVariant,
-    { bg: string; text: string; dot: string; border: string; glow: string }
+    { bg: string; text: string; dot: string; border: string }
   > = {
     success: {
-      bg: 'bg-emerald-950/60',
-      text: 'text-emerald-300',
-      dot: 'bg-emerald-400',
-      border: 'border-emerald-600/30',
-      glow: 'shadow-emerald-950/50',
+      bg: 'bg-emerald-50',
+      text: 'text-emerald-800',
+      dot: 'bg-emerald-600',
+      border: 'border-emerald-200',
     },
     warning: {
-      bg: 'bg-amber-950/60',
-      text: 'text-amber-300',
-      dot: 'bg-amber-400',
-      border: 'border-amber-600/30',
-      glow: 'shadow-amber-950/50',
+      bg: 'bg-amber-50',
+      text: 'text-amber-800',
+      dot: 'bg-amber-600',
+      border: 'border-amber-200',
     },
     error: {
-      bg: 'bg-rose-950/60',
-      text: 'text-rose-300',
-      dot: 'bg-rose-400',
-      border: 'border-rose-600/30',
-      glow: 'shadow-rose-950/50',
+      bg: 'bg-rose-50',
+      text: 'text-rose-800',
+      dot: 'bg-rose-600',
+      border: 'border-rose-200',
     },
     info: {
-      bg: 'bg-cyan-950/60',
-      text: 'text-cyan-300',
-      dot: 'bg-cyan-400',
-      border: 'border-cyan-600/30',
-      glow: 'shadow-cyan-950/50',
+      bg: 'bg-sky-50',
+      text: 'text-sky-800',
+      dot: 'bg-sky-600',
+      border: 'border-sky-200',
     },
     laser: {
-      bg: 'bg-sky-950/60',
-      text: 'text-sky-200',
-      dot: 'bg-sky-400',
-      border: 'border-sky-500/40',
-      glow: 'shadow-sky-950/50',
+      bg: 'bg-indigo-50',
+      text: 'text-indigo-800',
+      dot: 'bg-indigo-600',
+      border: 'border-indigo-200',
     },
     neutral: {
-      bg: 'bg-slate-900/80',
-      text: 'text-slate-300',
-      dot: 'bg-slate-400',
-      border: 'border-slate-700/50',
-      glow: 'shadow-black/50',
+      bg: 'bg-stone-100',
+      text: 'text-stone-700',
+      dot: 'bg-stone-500',
+      border: 'border-stone-200',
     },
   }
 
@@ -73,7 +67,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
 
   return (
     <span
-      className={`inline-flex items-center rounded font-mono font-medium tracking-wide uppercase border ${s.bg} ${s.text} ${s.border} shadow-sm ${s.glow} ${sizeClasses} ${className}`}
+      className={`inline-flex items-center rounded-md font-mono font-medium tracking-wide uppercase border ${s.bg} ${s.text} ${s.border} shadow-2xs ${sizeClasses} ${className}`}
     >
       <span className="relative flex h-1.5 w-1.5 shrink-0">
         {pulse && (

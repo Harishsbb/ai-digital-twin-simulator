@@ -28,35 +28,35 @@ export const Card: React.FC<CardProps> = ({
 }) => {
   return (
     <div
-      className={`relative rounded-xl mech-panel p-5 transition-all duration-300 ${
+      className={`relative rounded-xl mech-panel p-5 transition-all duration-200 ${
         techBracket ? 'tech-bracket' : ''
       } ${className}`}
     >
       {(title || Icon || action || badge || tag) && (
         <div
-          className={`flex items-start justify-between gap-3 pb-3.5 border-b border-slate-800/80 mb-4 ${headerClassName}`}
+          className={`flex items-start justify-between gap-3 pb-3 border-b border-stone-100 mb-4 ${headerClassName}`}
         >
           <div className="flex items-center gap-3 min-w-0">
             {Icon && (
-              <div className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-cyan-400 shrink-0 shadow-inner">
+              <div className="p-2 rounded-lg bg-stone-50 border border-stone-200/80 text-stone-700 shrink-0 shadow-2xs">
                 <Icon className="w-4 h-4" />
               </div>
             )}
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 {tag && (
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-400 font-semibold bg-cyan-950/60 px-1.5 py-0.5 rounded border border-cyan-800/40">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-stone-700 font-semibold bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200">
                     {tag}
                   </span>
                 )}
                 {title && (
-                  <h3 className="text-xs font-semibold text-slate-100 tracking-wider uppercase font-mono truncate">
+                  <h3 className="text-xs font-semibold text-stone-900 tracking-wider uppercase font-mono truncate">
                     {title}
                   </h3>
                 )}
               </div>
               {subtitle && (
-                <p className="text-[11px] text-slate-400 mt-0.5 line-clamp-1">
+                <p className="text-[11px] text-stone-500 mt-0.5 line-clamp-1">
                   {subtitle}
                 </p>
               )}

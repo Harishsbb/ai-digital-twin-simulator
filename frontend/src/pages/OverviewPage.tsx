@@ -165,18 +165,18 @@ export const OverviewPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Editorial Header / System Status Banner */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-5 rounded-xl mech-panel border-slate-800">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-5 rounded-xl mech-panel">
         <div>
           <div className="flex items-center gap-2 mb-1.5">
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-700/60 font-semibold tracking-wider">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-stone-100 text-stone-700 border border-stone-200 font-semibold tracking-wider">
               FACILITY // PLANT NORTH - BAY 04
             </span>
-            <span className="text-slate-400 font-mono text-xs">COORDINATES // 41.8781° N, 87.6298° W</span>
+            <span className="text-stone-400 font-mono text-xs">COORDINATES // 41.8781° N, 87.6298° W</span>
           </div>
-          <h2 className="text-2xl font-bold font-mono tracking-tight text-slate-100 uppercase">
+          <h2 className="text-2xl font-bold font-mono tracking-tight text-stone-900 uppercase">
             Asset Supervisor & Machine Architecture
           </h2>
-          <p className="text-xs text-slate-400 font-mono mt-0.5">
+          <p className="text-xs text-stone-500 font-mono mt-0.5">
             Target Machine: Siemens Simotics GP 150 kW High-Voltage Induction Motor (3-Phase, 4-Pole)
           </p>
         </div>
@@ -185,9 +185,9 @@ export const OverviewPage: React.FC = () => {
           <button
             onClick={loadBackendData}
             disabled={loading}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-slate-900 border border-slate-700 hover:border-cyan-500/50 text-xs font-mono text-slate-200 hover:text-cyan-300 transition-all shadow-sm"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-stone-900 border border-stone-800 text-xs font-mono text-white hover:bg-stone-800 transition-all shadow-2xs"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-cyan-400' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Verify API Handshake</span>
           </button>
         </div>
@@ -195,80 +195,75 @@ export const OverviewPage: React.FC = () => {
 
       {/* Primary Asset Blueprint & Nameplate Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column: Interactive Technical Motor Blueprint (7 cols) */}
+        {/* Left Column: Architectural Technical Motor Blueprint (7 cols) */}
         <div className="lg:col-span-7">
           <Card
             title="Interactive Motor Blueprint & Sensor Map"
             subtitle="Click or tap any probe marker to inspect telemetry specifications"
-            tag="CAD SCHEMATIC"
+            tag="CAD DRAFTING"
             icon={Layers}
             badge={<StatusBadge label="SCHEMATIC 2D" variant="laser" pulse={false} size="sm" />}
             techBracket={true}
           >
-            {/* Vector Blueprint Visualizer */}
-            <div className="relative rounded-lg bg-[#05070c] border border-slate-800/80 p-4 overflow-hidden">
-              {/* Drafting grid inside blueprint */}
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,240,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,240,255,0.03)_1px,transparent_1px)] bg-[size:20px_20px]" />
-              
-              {/* Scanline overlay */}
-              <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
-                <div className="w-full h-8 bg-gradient-to-b from-transparent via-cyan-400/20 to-transparent animate-scanline" />
-              </div>
+            {/* Vector Blueprint Visualizer on Engineering Vellum */}
+            <div className="relative rounded-lg bg-[#f5f4ef] border border-stone-300 p-4 overflow-hidden shadow-inner">
+              {/* Technical drafting grid inside blueprint */}
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.04)_1px,transparent_1px)] bg-[size:20px_20px]" />
 
               {/* Technical SVG Motor Blueprint */}
               <div className="relative z-10 py-4 flex items-center justify-center">
                 <svg
                   viewBox="0 0 600 240"
-                  className="w-full max-w-xl h-auto drop-shadow-[0_0_12px_rgba(0,240,255,0.15)]"
+                  className="w-full max-w-xl h-auto"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   {/* Shaft line */}
-                  <rect x="20" y="110" width="560" height="20" rx="3" fill="#1e293b" stroke="#00f0ff" strokeWidth="1.5" strokeDasharray="6 3" />
+                  <rect x="20" y="110" width="560" height="20" rx="3" fill="#e7e5df" stroke="#0284c7" strokeWidth="1.5" strokeDasharray="6 3" />
                   
                   {/* Motor Frame / Stator Casing */}
-                  <rect x="150" y="40" width="300" height="160" rx="8" fill="#0f172a" stroke="#38bdf8" strokeWidth="2" />
+                  <rect x="150" y="40" width="300" height="160" rx="8" fill="#eae8df" stroke="#1c1917" strokeWidth="2" />
                   
                   {/* Cooling Fins on Stator */}
                   {[170, 195, 220, 245, 270, 295, 320, 345, 370, 395, 420].map((x) => (
-                    <line key={x} x1={x} y1="32" x2={x} y2="40" stroke="#38bdf8" strokeWidth="2" />
+                    <line key={x} x1={x} y1="32" x2={x} y2="40" stroke="#1c1917" strokeWidth="2" />
                   ))}
                   {[170, 195, 220, 245, 270, 295, 320, 345, 370, 395, 420].map((x) => (
-                    <line key={x} x1={x} y1="200" x2={x} y2="208" stroke="#38bdf8" strokeWidth="2" />
+                    <line key={x} x1={x} y1="200" x2={x} y2="208" stroke="#1c1917" strokeWidth="2" />
                   ))}
 
                   {/* Stator Core Windings */}
-                  <rect x="180" y="60" width="240" height="120" rx="4" fill="#1e2230" stroke="#64748b" strokeWidth="1.5" />
-                  <path d="M 190 70 L 410 70 M 190 170 L 410 170" stroke="#f59e0b" strokeWidth="2" strokeDasharray="4 2" />
+                  <rect x="180" y="60" width="240" height="120" rx="4" fill="#dfdcd2" stroke="#57534e" strokeWidth="1.5" />
+                  <path d="M 190 70 L 410 70 M 190 170 L 410 170" stroke="#d97706" strokeWidth="2" strokeDasharray="4 2" />
 
                   {/* Drive-End (DE) Bearing Housing */}
-                  <rect x="120" y="75" width="30" height="90" rx="4" fill="#111827" stroke="#00f0ff" strokeWidth="2" />
-                  <circle cx="135" cy="120" r="12" fill="#0369a1" stroke="#38bdf8" strokeWidth="1.5" />
+                  <rect x="120" y="75" width="30" height="90" rx="4" fill="#d6d3c9" stroke="#0284c7" strokeWidth="2" />
+                  <circle cx="135" cy="120" r="12" fill="#0284c7" stroke="#0369a1" strokeWidth="1.5" />
 
                   {/* Non-Drive-End (NDE) Bearing Housing */}
-                  <rect x="450" y="75" width="30" height="90" rx="4" fill="#111827" stroke="#00f0ff" strokeWidth="2" />
-                  <circle cx="465" cy="120" r="12" fill="#0369a1" stroke="#38bdf8" strokeWidth="1.5" />
+                  <rect x="450" y="75" width="30" height="90" rx="4" fill="#d6d3c9" stroke="#0284c7" strokeWidth="2" />
+                  <circle cx="465" cy="120" r="12" fill="#0284c7" stroke="#0369a1" strokeWidth="1.5" />
 
                   {/* Power Terminal Junction Box */}
-                  <rect x="250" y="10" width="100" height="30" rx="3" fill="#1e293b" stroke="#10b981" strokeWidth="2" />
-                  <text x="270" y="28" fill="#10b981" fontSize="10" fontFamily="monospace" fontWeight="bold">PWR TERM</text>
+                  <rect x="250" y="10" width="100" height="30" rx="3" fill="#ecfdf5" stroke="#059669" strokeWidth="2" />
+                  <text x="268" y="28" fill="#059669" fontSize="10" fontFamily="monospace" fontWeight="bold">PWR TERM</text>
 
                   {/* Cooling Fan Shroud (NDE Side) */}
-                  <path d="M 480 55 L 530 75 L 530 165 L 480 185 Z" fill="#1e293b" stroke="#64748b" strokeWidth="1.5" />
-                  <text x="495" y="124" fill="#94a3b8" fontSize="9" fontFamily="monospace">FAN</text>
+                  <path d="M 480 55 L 530 75 L 530 165 L 480 185 Z" fill="#e7e5df" stroke="#57534e" strokeWidth="1.5" />
+                  <text x="495" y="124" fill="#57534e" fontSize="9" fontFamily="monospace">FAN</text>
 
                   {/* Drive Shaft Keyway */}
-                  <rect x="40" y="105" width="40" height="6" fill="#38bdf8" />
-                  <text x="45" y="145" fill="#38bdf8" fontSize="10" fontFamily="monospace">OUTPUT SHAFT</text>
+                  <rect x="40" y="105" width="40" height="6" fill="#0284c7" />
+                  <text x="45" y="145" fill="#0284c7" fontSize="10" fontFamily="monospace" fontWeight="bold">OUTPUT SHAFT</text>
 
                   {/* Interactive Hotspot 1: VIB-DE-01 */}
                   <g
                     className="cursor-pointer transition-transform hover:scale-110"
                     onClick={() => setSelectedHotspot(SENSOR_HOTSPOTS[0])}
                   >
-                    <circle cx="135" cy="50" r="14" fill="#0c4a6e" stroke="#00f0ff" strokeWidth="2" />
-                    <circle cx="135" cy="50" r="4" fill="#38bdf8" className="animate-ping" />
-                    <text x="127" y="54" fill="#e0f2fe" fontSize="10" fontFamily="monospace" fontWeight="bold">DE</text>
+                    <circle cx="135" cy="50" r="14" fill="#0284c7" stroke="#ffffff" strokeWidth="2" />
+                    <circle cx="135" cy="50" r="4" fill="#ffffff" className="animate-ping" />
+                    <text x="127" y="54" fill="#ffffff" fontSize="10" fontFamily="monospace" fontWeight="bold">DE</text>
                   </g>
 
                   {/* Interactive Hotspot 2: VIB-NDE-01 */}
@@ -276,9 +271,9 @@ export const OverviewPage: React.FC = () => {
                     className="cursor-pointer transition-transform hover:scale-110"
                     onClick={() => setSelectedHotspot(SENSOR_HOTSPOTS[1])}
                   >
-                    <circle cx="465" cy="50" r="14" fill="#0c4a6e" stroke="#00f0ff" strokeWidth="2" />
-                    <circle cx="465" cy="50" r="4" fill="#38bdf8" className="animate-ping" />
-                    <text x="454" y="54" fill="#e0f2fe" fontSize="9" fontFamily="monospace" fontWeight="bold">NDE</text>
+                    <circle cx="465" cy="50" r="14" fill="#0284c7" stroke="#ffffff" strokeWidth="2" />
+                    <circle cx="465" cy="50" r="4" fill="#ffffff" className="animate-ping" />
+                    <text x="454" y="54" fill="#ffffff" fontSize="9" fontFamily="monospace" fontWeight="bold">NDE</text>
                   </g>
 
                   {/* Interactive Hotspot 3: TMP-ST-UVW */}
@@ -286,8 +281,8 @@ export const OverviewPage: React.FC = () => {
                     className="cursor-pointer transition-transform hover:scale-110"
                     onClick={() => setSelectedHotspot(SENSOR_HOTSPOTS[2])}
                   >
-                    <circle cx="300" cy="120" r="16" fill="#78350f" stroke="#f59e0b" strokeWidth="2" />
-                    <text x="290" y="124" fill="#fef3c7" fontSize="9" fontFamily="monospace" fontWeight="bold">TMP</text>
+                    <circle cx="300" cy="120" r="16" fill="#d97706" stroke="#ffffff" strokeWidth="2" />
+                    <text x="290" y="124" fill="#ffffff" fontSize="9" fontFamily="monospace" fontWeight="bold">TMP</text>
                   </g>
 
                   {/* Interactive Hotspot 4: PWR-CT-01 */}
@@ -295,24 +290,24 @@ export const OverviewPage: React.FC = () => {
                     className="cursor-pointer transition-transform hover:scale-110"
                     onClick={() => setSelectedHotspot(SENSOR_HOTSPOTS[3])}
                   >
-                    <circle cx="230" cy="25" r="14" fill="#064e3b" stroke="#10b981" strokeWidth="2" />
-                    <text x="221" y="29" fill="#d1fae5" fontSize="9" fontFamily="monospace" fontWeight="bold">PWR</text>
+                    <circle cx="230" cy="25" r="14" fill="#059669" stroke="#ffffff" strokeWidth="2" />
+                    <text x="221" y="29" fill="#ffffff" fontSize="9" fontFamily="monospace" fontWeight="bold">PWR</text>
                   </g>
                 </svg>
               </div>
 
               {/* Bottom probe selector pill bar */}
-              <div className="pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
-                <span className="text-slate-400 text-[11px]">ACTIVE PROBE SELECTION:</span>
+              <div className="pt-3 border-t border-stone-300 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+                <span className="text-stone-600 text-[11px] font-semibold">ACTIVE PROBE SELECTION:</span>
                 <div className="flex flex-wrap gap-1.5">
                   {SENSOR_HOTSPOTS.map((h) => (
                     <button
                       key={h.id}
                       onClick={() => setSelectedHotspot(h)}
-                      className={`px-2.5 py-1 rounded text-[11px] font-mono border transition-all ${
+                      className={`px-2.5 py-1 rounded-md text-[11px] font-mono border transition-all ${
                         selectedHotspot.id === h.id
-                          ? 'bg-cyan-950 text-cyan-300 border-cyan-500 font-semibold shadow-sm'
-                          : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:text-slate-200'
+                          ? 'bg-stone-900 text-white border-stone-900 font-semibold shadow-xs'
+                          : 'bg-white text-stone-700 border-stone-300 hover:bg-stone-100'
                       }`}
                     >
                       {h.code}
@@ -323,112 +318,112 @@ export const OverviewPage: React.FC = () => {
             </div>
 
             {/* Selected Hotspot Detailed Specs Panel */}
-            <div className="mt-4 p-4 rounded-lg bg-slate-900/60 border border-slate-800/80 font-mono text-xs space-y-2">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-800/60">
+            <div className="mt-4 p-4 rounded-lg bg-stone-50 border border-stone-200/90 font-mono text-xs space-y-2">
+              <div className="flex items-center justify-between pb-2 border-b border-stone-200">
                 <div className="flex items-center gap-2">
-                  <span className="text-cyan-400 font-bold">{selectedHotspot.code}</span>
-                  <span className="text-slate-200 font-semibold">{selectedHotspot.name}</span>
+                  <span className="text-stone-900 font-bold">{selectedHotspot.code}</span>
+                  <span className="text-stone-700 font-semibold">{selectedHotspot.name}</span>
                 </div>
                 <StatusBadge label="PROBE READY" variant="success" pulse={false} size="sm" />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] pt-1">
                 <div>
-                  <span className="text-slate-400">Transducer:</span>{' '}
-                  <span className="text-slate-300">{selectedHotspot.type}</span>
+                  <span className="text-stone-500">Transducer:</span>{' '}
+                  <span className="text-stone-800 font-medium">{selectedHotspot.type}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400">Location:</span>{' '}
-                  <span className="text-slate-300">{selectedHotspot.location}</span>
+                  <span className="text-stone-500">Location:</span>{' '}
+                  <span className="text-stone-800 font-medium">{selectedHotspot.location}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400">Sampling Rate:</span>{' '}
-                  <span className="text-slate-300">{selectedHotspot.sampling}</span>
+                  <span className="text-stone-500">Sampling Rate:</span>{' '}
+                  <span className="text-stone-800 font-medium">{selectedHotspot.sampling}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400">Threshold:</span>{' '}
-                  <span className="text-amber-400">{selectedHotspot.spec}</span>
+                  <span className="text-stone-500">Threshold:</span>{' '}
+                  <span className="text-amber-800 font-semibold">{selectedHotspot.spec}</span>
                 </div>
               </div>
             </div>
           </Card>
         </div>
 
-        {/* Right Column: Physical Rating Nameplate (Milled Metal Style) (5 cols) */}
+        {/* Right Column: Physical Rating Nameplate (5 cols) */}
         <div className="lg:col-span-5 space-y-5">
           {/* Machine Nameplate */}
-          <div className="relative rounded-xl border border-amber-500/30 bg-gradient-to-br from-slate-900 via-[#0f1422] to-slate-950 p-5 shadow-xl shadow-black/60 tech-bracket">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-700/60 mb-3">
+          <div className="relative rounded-xl border border-stone-300 bg-gradient-to-br from-stone-50 via-white to-stone-100 p-5 shadow-2xs tech-bracket">
+            <div className="flex items-center justify-between pb-3 border-b border-stone-200 mb-3">
               <div>
-                <h3 className="font-mono text-xs tracking-wider uppercase font-extrabold text-amber-400">
+                <h3 className="font-mono text-xs tracking-wider uppercase font-extrabold text-stone-900">
                   EQUIPMENT NAMEPLATE // RATING DATA
                 </h3>
-                <p className="font-mono text-[10px] text-slate-400">
+                <p className="font-mono text-[10px] text-stone-500">
                   SIEMENS SIMOTICS GP 1LE1 HIGH EFFICIENCY MOTOR
                 </p>
               </div>
-              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-700/50">
+              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-300">
                 IE3 PREMIUM
               </span>
             </div>
 
             <div className="font-mono text-xs space-y-2.5">
-              <div className="grid grid-cols-2 gap-2 pb-2 border-b border-slate-800/80">
+              <div className="grid grid-cols-2 gap-2 pb-2 border-b border-stone-200">
                 <div>
-                  <div className="text-[10px] text-slate-400">RATED POWER</div>
-                  <div className="text-slate-100 font-bold text-sm">150 kW (200 HP)</div>
+                  <div className="text-[10px] text-stone-500">RATED POWER</div>
+                  <div className="text-stone-900 font-bold text-sm">150 kW (200 HP)</div>
                 </div>
                 <div>
-                  <div className="text-[10px] text-slate-400">FRAME SIZE</div>
-                  <div className="text-slate-100 font-bold text-sm">315 M (Cast Iron)</div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-2 pb-2 border-b border-slate-800/80 text-[11px]">
-                <div>
-                  <div className="text-[10px] text-slate-400">VOLTAGE</div>
-                  <div className="text-slate-200 font-semibold">400 V Δ / 690 V Y</div>
-                </div>
-                <div>
-                  <div className="text-[10px] text-slate-400">CURRENT</div>
-                  <div className="text-slate-200 font-semibold">265 A / 153 A</div>
-                </div>
-                <div>
-                  <div className="text-[10px] text-slate-400">FREQUENCY</div>
-                  <div className="text-slate-200 font-semibold">50 Hz</div>
+                  <div className="text-[10px] text-stone-500">FRAME SIZE</div>
+                  <div className="text-stone-900 font-bold text-sm">315 M (Cast Iron)</div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-2 pb-2 border-b border-slate-800/80 text-[11px]">
+              <div className="grid grid-cols-3 gap-2 pb-2 border-b border-stone-200 text-[11px]">
                 <div>
-                  <div className="text-[10px] text-slate-400">SPEED (RPM)</div>
-                  <div className="text-cyan-400 font-bold">1488 RPM</div>
+                  <div className="text-[10px] text-stone-500">VOLTAGE</div>
+                  <div className="text-stone-800 font-semibold">400 V Δ / 690 V Y</div>
                 </div>
                 <div>
-                  <div className="text-[10px] text-slate-400">COS φ (PF)</div>
-                  <div className="text-slate-200 font-semibold">0.88</div>
+                  <div className="text-[10px] text-stone-500">CURRENT</div>
+                  <div className="text-stone-800 font-semibold">265 A / 153 A</div>
                 </div>
                 <div>
-                  <div className="text-[10px] text-slate-400">EFFICIENCY</div>
-                  <div className="text-emerald-400 font-bold">96.2 %</div>
+                  <div className="text-[10px] text-stone-500">FREQUENCY</div>
+                  <div className="text-stone-800 font-semibold">50 Hz</div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2 pb-2 border-b border-stone-200 text-[11px]">
+                <div>
+                  <div className="text-[10px] text-stone-500">SPEED (RPM)</div>
+                  <div className="text-stone-900 font-bold">1488 RPM</div>
+                </div>
+                <div>
+                  <div className="text-[10px] text-stone-500">COS φ (PF)</div>
+                  <div className="text-stone-800 font-semibold">0.88</div>
+                </div>
+                <div>
+                  <div className="text-[10px] text-stone-500">EFFICIENCY</div>
+                  <div className="text-emerald-700 font-bold">96.2 %</div>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-[11px]">
                 <div>
-                  <span className="text-slate-400">ENCLOSURE:</span>{' '}
-                  <span className="text-slate-200 font-medium">IP55 / IC411 TEFC</span>
+                  <span className="text-stone-500">ENCLOSURE:</span>{' '}
+                  <span className="text-stone-800 font-medium">IP55 / IC411 TEFC</span>
                 </div>
                 <div>
-                  <span className="text-slate-400">MASS:</span>{' '}
-                  <span className="text-slate-200 font-medium">1,140 kg</span>
+                  <span className="text-stone-500">MASS:</span>{' '}
+                  <span className="text-stone-800 font-medium">1,140 kg</span>
                 </div>
                 <div>
-                  <span className="text-slate-400">INSULATION:</span>{' '}
-                  <span className="text-slate-200 font-medium">Class 155 (F)</span>
+                  <span className="text-stone-500">INSULATION:</span>{' '}
+                  <span className="text-stone-800 font-medium">Class 155 (F)</span>
                 </div>
                 <div>
-                  <span className="text-slate-400">SERIAL NO:</span>{' '}
-                  <span className="text-cyan-400 font-semibold">SN-9042-DE-2026</span>
+                  <span className="text-stone-500">SERIAL NO:</span>{' '}
+                  <span className="text-stone-900 font-semibold">SN-9042-DE-2026</span>
                 </div>
               </div>
             </div>
@@ -451,33 +446,33 @@ export const OverviewPage: React.FC = () => {
             }
           >
             <div className="font-mono text-xs space-y-2">
-              <div className="flex items-center justify-between py-1 border-b border-slate-800/60">
-                <span className="text-slate-400">API Host URL</span>
-                <span className="text-cyan-400 font-semibold truncate max-w-[190px]" title={getApiBaseUrl()}>
+              <div className="flex items-center justify-between py-1 border-b border-stone-100">
+                <span className="text-stone-500">API Host URL</span>
+                <span className="text-stone-900 font-semibold truncate max-w-[190px]" title={getApiBaseUrl()}>
                   {getApiBaseUrl()}
                 </span>
               </div>
-              <div className="flex items-center justify-between py-1 border-b border-slate-800/60">
-                <span className="text-slate-400">Service Status</span>
-                <span className={healthData ? 'text-emerald-400 font-bold' : 'text-rose-400'}>
+              <div className="flex items-center justify-between py-1 border-b border-stone-100">
+                <span className="text-stone-500">Service Status</span>
+                <span className={healthData ? 'text-emerald-700 font-bold' : 'text-rose-700 font-bold'}>
                   {healthData ? healthData.status.toUpperCase() : 'OFFLINE'}
                 </span>
               </div>
-              <div className="flex items-center justify-between py-1 border-b border-slate-800/60">
-                <span className="text-slate-400">Build Version</span>
-                <span className="text-slate-200">{appInfo?.version || '0.1.0'}</span>
+              <div className="flex items-center justify-between py-1 border-b border-stone-100">
+                <span className="text-stone-500">Build Version</span>
+                <span className="text-stone-800">{appInfo?.version || '0.1.0'}</span>
               </div>
-              <div className="flex items-center justify-between py-1 border-b border-slate-800/60">
-                <span className="text-slate-400">Architecture Stage</span>
-                <span className="text-cyan-300 font-semibold">{appInfo?.stage || 'Step 1: Setup'}</span>
+              <div className="flex items-center justify-between py-1 border-b border-stone-100">
+                <span className="text-stone-500">Architecture Stage</span>
+                <span className="text-stone-900 font-semibold">{appInfo?.stage || 'Step 1: Setup'}</span>
               </div>
-              <div className="flex items-center justify-between pt-1 text-[11px] text-slate-400">
+              <div className="flex items-center justify-between pt-1 text-[11px] text-stone-500">
                 <span>CORS Restriction:</span>
-                <span className="text-emerald-400">http://localhost:5173 only</span>
+                <span className="text-emerald-700 font-medium">http://localhost:5173 only</span>
               </div>
 
               {error && (
-                <div className="p-2 rounded bg-rose-950/40 border border-rose-800/40 text-[11px] text-rose-300 font-sans mt-2">
+                <div className="p-2 rounded bg-rose-50 border border-rose-200 text-[11px] text-rose-800 font-sans mt-2">
                   Notice: Backend API is unreachable at {getApiBaseUrl()}. Please ensure Uvicorn is running.
                 </div>
               )}
@@ -486,7 +481,7 @@ export const OverviewPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Interactive Simulation Physics Scenario Previewer (Taste Skill "Live Thing") */}
+      {/* Interactive Simulation Physics Scenario Previewer */}
       <Card
         title="Telemetry Simulation Engine // Scenario Physics Preview"
         subtitle="Select a target operating scenario to inspect its mathematical disturbance model for Step 2"
@@ -503,19 +498,21 @@ export const OverviewPage: React.FC = () => {
                 onClick={() => setSelectedScenario(s)}
                 className={`p-3 rounded-lg border text-left transition-all font-mono ${
                   selectedScenario.id === s.id
-                    ? 'bg-cyan-950/60 border-cyan-500 shadow-md shadow-cyan-950/30'
-                    : 'bg-slate-900/60 border-slate-800 hover:border-slate-700 hover:bg-slate-900'
+                    ? 'bg-stone-900 text-white border-stone-900 shadow-2xs'
+                    : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] text-slate-400">{s.category}</span>
+                  <span className={`text-[10px] ${selectedScenario.id === s.id ? 'text-stone-400' : 'text-stone-500'}`}>
+                    {s.category}
+                  </span>
                   {selectedScenario.id === s.id && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   )}
                 </div>
                 <div
                   className={`text-xs font-semibold ${
-                    selectedScenario.id === s.id ? 'text-cyan-300' : 'text-slate-200'
+                    selectedScenario.id === s.id ? 'text-white' : 'text-stone-900'
                   }`}
                 >
                   {s.name}
@@ -525,35 +522,35 @@ export const OverviewPage: React.FC = () => {
           </div>
 
           {/* Active Scenario Detail Box */}
-          <div className="p-4 rounded-lg bg-[#050810] border border-slate-800/90 font-mono space-y-2.5">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2 border-b border-slate-800/80">
+          <div className="p-4 rounded-lg bg-stone-50 border border-stone-200 font-mono space-y-2.5">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2 border-b border-stone-200">
               <div className="flex items-center gap-2">
-                <Terminal className="w-4 h-4 text-cyan-400" />
-                <span className="text-xs font-bold text-slate-100 uppercase">
+                <Terminal className="w-4 h-4 text-stone-700" />
+                <span className="text-xs font-bold text-stone-900 uppercase">
                   {selectedScenario.name}
                 </span>
               </div>
-              <span className="text-[10px] px-2 py-0.5 rounded bg-slate-900 text-slate-300 border border-slate-800">
+              <span className="text-[10px] px-2 py-0.5 rounded bg-white text-stone-600 border border-stone-200 font-semibold">
                 SCENARIO ID: {selectedScenario.id.toUpperCase()}
               </span>
             </div>
 
-            <p className="text-xs text-slate-300 font-sans leading-relaxed">
+            <p className="text-xs text-stone-600 font-sans leading-relaxed">
               {selectedScenario.description}
             </p>
 
             <div className="pt-2 grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-              <div className="p-3 rounded bg-slate-900/80 border border-slate-800">
-                <div className="text-[10px] text-cyan-400 font-bold mb-1">MATHEMATICAL MODEL:</div>
-                <div className="text-slate-300 text-[11px]">{selectedScenario.mathModel}</div>
+              <div className="p-3 rounded bg-white border border-stone-200 shadow-2xs">
+                <div className="text-[10px] text-stone-500 font-bold mb-1 uppercase tracking-wider">MATHEMATICAL MODEL:</div>
+                <div className="text-stone-800 text-[11px] font-mono">{selectedScenario.mathModel}</div>
               </div>
-              <div className="p-3 rounded bg-slate-900/80 border border-slate-800">
-                <div className="text-[10px] text-amber-400 font-bold mb-1">PLANNED TELEMETRY IMPACT:</div>
-                <div className="text-slate-300 text-[11px]">{selectedScenario.plannedImpact}</div>
+              <div className="p-3 rounded bg-white border border-stone-200 shadow-2xs">
+                <div className="text-[10px] text-amber-700 font-bold mb-1 uppercase tracking-wider">PLANNED TELEMETRY IMPACT:</div>
+                <div className="text-stone-800 text-[11px] font-mono">{selectedScenario.plannedImpact}</div>
               </div>
             </div>
 
-            <div className="pt-1 text-[11px] text-slate-400 font-sans">
+            <div className="pt-1 text-[11px] text-stone-400 font-sans">
               * Note: Synthetic mathematical generators and live WebSocket broadcasts will be activated in Step 2.
             </div>
           </div>
@@ -568,54 +565,54 @@ export const OverviewPage: React.FC = () => {
         icon={Zap}
       >
         <div className="grid grid-cols-1 md:grid-cols-5 gap-3 pt-1">
-          <div className="p-3.5 rounded-lg border border-cyan-500/70 bg-cyan-950/30 font-mono">
-            <div className="flex items-center justify-between text-xs font-bold text-cyan-400 mb-1">
+          <div className="p-3.5 rounded-lg border border-stone-900 bg-stone-900 text-white font-mono shadow-2xs">
+            <div className="flex items-center justify-between text-xs font-bold text-stone-200 mb-1">
               <span>STEP 01</span>
-              <CheckCircle2 className="w-4 h-4 text-cyan-400" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
             </div>
-            <div className="text-xs font-bold text-slate-100">Project Setup</div>
-            <p className="text-[11px] text-slate-400 font-sans mt-1">
+            <div className="text-xs font-bold text-white">Project Setup</div>
+            <p className="text-[11px] text-stone-300 font-sans mt-1">
               React + Vite + Tailwind shell, FastAPI backend, routing & health checks.
             </p>
-            <div className="mt-2 text-[10px] font-bold text-cyan-300 uppercase">
+            <div className="mt-2 text-[10px] font-bold text-emerald-300 uppercase">
               ACTIVE STAGE
             </div>
           </div>
 
-          <div className="p-3.5 rounded-lg border border-slate-800 bg-slate-900/40 font-mono opacity-80">
-            <div className="text-xs font-bold text-slate-400 mb-1">STEP 02</div>
-            <div className="text-xs font-bold text-slate-200">Sensor Simulation</div>
-            <p className="text-[11px] text-slate-400 font-sans mt-1">
+          <div className="p-3.5 rounded-lg border border-stone-200 bg-white font-mono text-stone-800">
+            <div className="text-xs font-bold text-stone-400 mb-1">STEP 02</div>
+            <div className="text-xs font-bold text-stone-900">Sensor Simulation</div>
+            <p className="text-[11px] text-stone-500 font-sans mt-1">
               Motor telemetry physics, vibration/temperature generation & WebSockets.
             </p>
-            <div className="mt-2 text-[10px] text-slate-400 uppercase">UPCOMING</div>
+            <div className="mt-2 text-[10px] text-stone-400 uppercase">UPCOMING</div>
           </div>
 
-          <div className="p-3.5 rounded-lg border border-slate-800 bg-slate-900/40 font-mono opacity-80">
-            <div className="text-xs font-bold text-slate-400 mb-1">STEP 03</div>
-            <div className="text-xs font-bold text-slate-200">3D Digital Twin</div>
-            <p className="text-[11px] text-slate-400 font-sans mt-1">
+          <div className="p-3.5 rounded-lg border border-stone-200 bg-white font-mono text-stone-800">
+            <div className="text-xs font-bold text-stone-400 mb-1">STEP 03</div>
+            <div className="text-xs font-bold text-stone-900">3D Digital Twin</div>
+            <p className="text-[11px] text-stone-500 font-sans mt-1">
               Interactive 3D motor model, thermal heatmaps & component dissection.
             </p>
-            <div className="mt-2 text-[10px] text-slate-400 uppercase">UPCOMING</div>
+            <div className="mt-2 text-[10px] text-stone-400 uppercase">UPCOMING</div>
           </div>
 
-          <div className="p-3.5 rounded-lg border border-slate-800 bg-slate-900/40 font-mono opacity-80">
-            <div className="text-xs font-bold text-slate-400 mb-1">STEP 04</div>
-            <div className="text-xs font-bold text-slate-200">AI Anomaly Engine</div>
-            <p className="text-[11px] text-slate-400 font-sans mt-1">
+          <div className="p-3.5 rounded-lg border border-stone-200 bg-white font-mono text-stone-800">
+            <div className="text-xs font-bold text-stone-400 mb-1">STEP 04</div>
+            <div className="text-xs font-bold text-stone-900">AI Anomaly Engine</div>
+            <p className="text-[11px] text-stone-500 font-sans mt-1">
               Unsupervised ML models, drift detection & health index scoring.
             </p>
-            <div className="mt-2 text-[10px] text-slate-400 uppercase">UPCOMING</div>
+            <div className="mt-2 text-[10px] text-stone-400 uppercase">UPCOMING</div>
           </div>
 
-          <div className="p-3.5 rounded-lg border border-slate-800 bg-slate-900/40 font-mono opacity-80">
-            <div className="text-xs font-bold text-slate-400 mb-1">STEP 05</div>
-            <div className="text-xs font-bold text-slate-200">Alerts & Analytics</div>
-            <p className="text-[11px] text-slate-400 font-sans mt-1">
+          <div className="p-3.5 rounded-lg border border-stone-200 bg-white font-mono text-stone-800">
+            <div className="text-xs font-bold text-stone-400 mb-1">STEP 05</div>
+            <div className="text-xs font-bold text-stone-900">Alerts & Analytics</div>
+            <p className="text-[11px] text-stone-500 font-sans mt-1">
               Threshold triggers, incident management & historical telemetry logs.
             </p>
-            <div className="mt-2 text-[10px] text-slate-400 uppercase">UPCOMING</div>
+            <div className="mt-2 text-[10px] text-stone-400 uppercase">UPCOMING</div>
           </div>
         </div>
       </Card>

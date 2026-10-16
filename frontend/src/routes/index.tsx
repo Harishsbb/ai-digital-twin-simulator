@@ -16,6 +16,9 @@ export const AppRoutes: React.FC = () => {
       <Route element={<DashboardLayout />}>
         <Route path="/" element={<OverviewPage />} />
         <Route path="/digital-twin" element={<DigitalTwinPage />} />
+        <Route path="/digital%20twin" element={<DigitalTwinPage />} />
+        <Route path="/digital twin" element={<DigitalTwinPage />} />
+        <Route path="/twin" element={<Navigate to="/digital-twin" replace />} />
         <Route path="/sensors" element={<SensorsPage />} />
         <Route path="/anomaly-detection" element={<AnomalyDetectionPage />} />
         <Route path="/alerts" element={<AlertsPage />} />

@@ -37,15 +37,35 @@ export interface MachineMetadata {
   facilityLocation: string
 }
 
-// 3D Digital Twin Visualizer Types (Step 2)
+// 3D Digital Twin Visualizer Types (Step 2 & 3D Exploded View)
 export type TwinVisualStatus = 'Normal' | 'Warning' | 'Critical'
+
+export type TwinViewMode = 'assembled' | 'exploded' | 'xray' | 'section'
 
 export interface TwinViewOptions {
   autoRotate: boolean
   wireframe: boolean
   showSensors: boolean
   explodedView: boolean
+  viewMode: TwinViewMode
+  showLabels: boolean
   rotationSpeed: number
+}
+
+export interface MotorComponentMetadata {
+  id: string
+  name: string
+  shortName: string
+  subtitle: string
+  functionDesc: string
+  material: string
+  status: TwinVisualStatus
+  temperatureRating: string
+  notes: string
+  anchorPosition: [number, number, number]
+  labelOffset: [number, number, number]
+  orderIndex: number
+  previewImage?: string
 }
 
 export interface TwinComponentInfo {
@@ -56,3 +76,4 @@ export interface TwinComponentInfo {
   status: TwinVisualStatus
   nominalSpec: string
 }
+

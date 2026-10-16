@@ -13,6 +13,7 @@ export interface MotorSceneHandle {
 interface MotorSceneProps {
   status: TwinVisualStatus
   options: TwinViewOptions
+  selectedComponentId: string | null
   onSelectComponent?: (componentId: string) => void
 }
 
@@ -22,7 +23,7 @@ const DEFAULT_CAMERA_POS: [number, number, number] = [-3.8, 2.0, 3.8]
 const DEFAULT_TARGET: [number, number, number] = [0, 0.05, 0]
 
 export const MotorScene = forwardRef<MotorSceneHandle, MotorSceneProps>(
-  ({ status, options, onSelectComponent }, ref) => {
+  ({ status, options, selectedComponentId, onSelectComponent }, ref) => {
     const controlsRef = useRef<OrbitControlsImpl>(null)
 
     useImperativeHandle(ref, () => ({
@@ -46,6 +47,7 @@ export const MotorScene = forwardRef<MotorSceneHandle, MotorSceneProps>(
             powerPreference: 'high-performance',
             toneMapping: THREE.ACESFilmicToneMapping,
             toneMappingExposure: 1.22,
+            localClippingEnabled: true,
           }}
           className="w-full h-full"
         >
@@ -181,6 +183,7 @@ export const MotorScene = forwardRef<MotorSceneHandle, MotorSceneProps>(
             <IndustrialMotor
               status={status}
               options={options}
+              selectedComponentId={selectedComponentId}
               onSelectComponent={onSelectComponent}
             />
           </Suspense>

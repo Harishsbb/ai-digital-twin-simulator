@@ -11,35 +11,35 @@ export const StatusSelectorCard: React.FC<StatusSelectorCardProps> = ({
   onChangeStatus,
 }) => {
   return (
-    <div className="rounded-2xl dark-panel p-6 shadow-xl space-y-4">
+    <div className="rounded-2xl dark-panel p-6 shadow-xl space-y-4 border border-white/5 relative overflow-hidden flex flex-col justify-between">
       {/* Title & Subtitle */}
       <div>
-        <h3 className="text-sm font-semibold text-white tracking-wide">
-          Change Machine Status (Test)
+        <h3 className="text-sm font-bold text-white tracking-wide">
+          Machine Status (Test)
         </h3>
-        <p className="text-xs text-slate-400 mt-1">
-          Select a status to see visual changes in the 3D model.
+        <p className="text-xs text-slate-400 mt-0.5">
+          Select a status to see visual changes
         </p>
       </div>
 
-      {/* 3 Large Interactive Status Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-1">
+      {/* 3 Interactive Status Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mt-2">
         {/* Normal Card */}
         <button
           type="button"
           onClick={() => onChangeStatus('Normal')}
-          className={`p-4 rounded-xl text-left transition-all duration-200 border cursor-pointer ${
+          className={`p-3.5 rounded-xl text-left transition-all duration-200 border cursor-pointer ${
             status === 'Normal'
-              ? 'bg-[#0b1c1d] border-emerald-500/80 shadow-[0_0_20px_rgba(16,185,129,0.15)] ring-1 ring-emerald-500/50'
-              : 'bg-[#0c121e]/80 border-slate-800/80 hover:border-slate-700 hover:bg-[#0f1726]'
+              ? 'bg-[#0b1c1d] border-emerald-500/80 shadow-[0_0_16px_rgba(16,185,129,0.2)] ring-1 ring-emerald-500/50'
+              : 'bg-[#0c121e]/80 border-white/5 hover:border-slate-700 hover:bg-[#0f1726]'
           }`}
         >
-          <div className="flex items-center gap-2.5 mb-2">
+          <div className="flex items-center gap-2 mb-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.9)]" />
-            <span className="font-semibold text-white text-sm">Normal</span>
+            <span className="font-semibold text-white text-xs">Normal</span>
           </div>
-          <div className="text-xs text-slate-400 leading-snug">
-            Standard operating condition
+          <div className="text-[11px] text-slate-400 leading-snug">
+            Operating normally
           </div>
         </button>
 
@@ -47,18 +47,18 @@ export const StatusSelectorCard: React.FC<StatusSelectorCardProps> = ({
         <button
           type="button"
           onClick={() => onChangeStatus('Warning')}
-          className={`p-4 rounded-xl text-left transition-all duration-200 border cursor-pointer ${
+          className={`p-3.5 rounded-xl text-left transition-all duration-200 border cursor-pointer ${
             status === 'Warning'
-              ? 'bg-[#1e1910] border-amber-500/80 shadow-[0_0_20px_rgba(245,158,11,0.15)] ring-1 ring-amber-500/50'
-              : 'bg-[#0c121e]/80 border-slate-800/80 hover:border-slate-700 hover:bg-[#0f1726]'
+              ? 'bg-[#1e1910] border-amber-500/80 shadow-[0_0_16px_rgba(245,158,11,0.2)] ring-1 ring-amber-500/50'
+              : 'bg-[#0c121e]/80 border-white/5 hover:border-slate-700 hover:bg-[#0f1726]'
           }`}
         >
-          <div className="flex items-center gap-2.5 mb-2">
+          <div className="flex items-center gap-2 mb-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.9)]" />
-            <span className="font-semibold text-white text-sm">Warning</span>
+            <span className="font-semibold text-white text-xs">Warning</span>
           </div>
-          <div className="text-xs text-slate-400 leading-snug">
-            Minor abnormalities detected
+          <div className="text-[11px] text-slate-400 leading-snug">
+            Minor abnormalities
           </div>
         </button>
 
@@ -66,18 +66,18 @@ export const StatusSelectorCard: React.FC<StatusSelectorCardProps> = ({
         <button
           type="button"
           onClick={() => onChangeStatus('Critical')}
-          className={`p-4 rounded-xl text-left transition-all duration-200 border cursor-pointer ${
+          className={`p-3.5 rounded-xl text-left transition-all duration-200 border cursor-pointer ${
             status === 'Critical'
-              ? 'bg-[#201015] border-rose-500/80 shadow-[0_0_20px_rgba(244,63,94,0.15)] ring-1 ring-rose-500/50'
-              : 'bg-[#0c121e]/80 border-slate-800/80 hover:border-slate-700 hover:bg-[#0f1726]'
+              ? 'bg-[#201015] border-rose-500/80 shadow-[0_0_16px_rgba(244,63,94,0.2)] ring-1 ring-rose-500/50'
+              : 'bg-[#0c121e]/80 border-white/5 hover:border-slate-700 hover:bg-[#0f1726]'
           }`}
         >
-          <div className="flex items-center gap-2.5 mb-2">
+          <div className="flex items-center gap-2 mb-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.9)]" />
-            <span className="font-semibold text-white text-sm">Critical</span>
+            <span className="font-semibold text-white text-xs">Critical</span>
           </div>
-          <div className="text-xs text-slate-400 leading-snug">
-            Severe condition requires attention
+          <div className="text-[11px] text-slate-400 leading-snug">
+            Requires immediate attention
           </div>
         </button>
       </div>

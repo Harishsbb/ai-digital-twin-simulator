@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="./docs/assets/banner.jpg" alt="AI Digital Twin Simulator Banner" width="100%" style="border-radius: 12px; margin-bottom: 16px;" />
+</div>
+
 # AI Digital Twin Simulator
 
 > **Software-Only Industrial Machine Monitoring, Telemetry Simulation & Predictive Maintenance Platform**

@@ -17,9 +17,9 @@ interface MotorSceneProps {
   onSelectComponent?: (componentId: string) => void
 }
 
-// Camera positioned at 3/4 isometric angle matching the reference image
-const DEFAULT_CAMERA_POS: [number, number, number] = [-3.8, 2.0, 3.8]
-const DEFAULT_TARGET: [number, number, number] = [0, 0.05, 0]
+// Camera positioned at the user-specified 3/4 angle and size
+const DEFAULT_CAMERA_POS: [number, number, number] = [-3.45, 1.95, 3.45]
+const DEFAULT_TARGET: [number, number, number] = [0.08, 0.08, 0.05]
 
 export const MotorScene = forwardRef<MotorSceneHandle, MotorSceneProps>(
   ({ status, options, selectedComponentId, onSelectComponent }, ref) => {
@@ -28,9 +28,8 @@ export const MotorScene = forwardRef<MotorSceneHandle, MotorSceneProps>(
     useImperativeHandle(ref, () => ({
       resetCamera: () => {
         if (controlsRef.current) {
-          controlsRef.current.reset()
-          controlsRef.current.object.position.set(...DEFAULT_CAMERA_POS)
           controlsRef.current.target.set(...DEFAULT_TARGET)
+          controlsRef.current.object.position.set(...DEFAULT_CAMERA_POS)
           controlsRef.current.update()
         }
       },
@@ -53,7 +52,7 @@ export const MotorScene = forwardRef<MotorSceneHandle, MotorSceneProps>(
           <PerspectiveCamera
             makeDefault
             position={DEFAULT_CAMERA_POS}
-            fov={40}
+            fov={38}
             near={0.1}
             far={100}
           />

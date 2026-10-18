@@ -15,14 +15,14 @@ export const DigitalTwinPage: React.FC = () => {
   // Selected Component for detailed inspection (defaults to Stator Core matching reference)
   const [selectedComponentId, setSelectedComponentId] = useState<string>('stator-core')
 
-  // 3D Viewport Options
+  // 3D Viewport Options - Default to Assembled
   const [options, setOptions] = useState<TwinViewOptions>({
     autoRotate: false,
     wireframe: false,
     showSensors: true,
-    explodedView: true,
-    viewMode: 'exploded',
-    showLabels: true,
+    explodedView: false,
+    viewMode: 'assembled',
+    showLabels: false,
     rotationSpeed: 1.0,
   })
 
@@ -32,7 +32,7 @@ export const DigitalTwinPage: React.FC = () => {
       ...prev,
       viewMode: mode,
       explodedView: mode === 'exploded',
-      showLabels: mode === 'exploded' ? true : prev.showLabels,
+      showLabels: mode === 'exploded',
     }))
   }
 
@@ -93,24 +93,34 @@ export const DigitalTwinPage: React.FC = () => {
 
         {/* Right: Quick Telemetry Status Pills */}
         <div className="flex flex-wrap items-center gap-3">
-          {/* Exploded View Active Pill */}
+          {/* Exploded / Assembled View Toggle Button */}
           <button
             type="button"
             onClick={() =>
               handleSelectViewMode(options.viewMode === 'exploded' ? 'assembled' : 'exploded')
             }
-            className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white border border-[#DFE7F3] shadow-xs hover:border-[#CBD5E1] transition-all cursor-pointer text-left"
+            className={`flex items-center gap-3 px-4 py-2.5 rounded-2xl border shadow-xs transition-all cursor-pointer text-left ${
+              options.viewMode === 'exploded'
+                ? 'bg-[#EAF2FF] border-[#1769FF] ring-1 ring-[#1769FF]/30'
+                : 'bg-white border-[#DFE7F3] hover:border-[#1769FF] hover:bg-[#F8FAFC]'
+            }`}
           >
-            <div className="w-8 h-8 rounded-xl bg-[#EAF2FF] border border-[#BFDBFE] flex items-center justify-center text-[#1769FF] shrink-0">
+            <div
+              className={`w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 transition-colors ${
+                options.viewMode === 'exploded'
+                  ? 'bg-[#1769FF] text-white border-[#1769FF]'
+                  : 'bg-[#EAF2FF] text-[#1769FF] border-[#BFDBFE]'
+              }`}
+            >
               <Layers className="w-4 h-4" />
             </div>
             <div className="leading-tight">
               <div className="text-xs font-bold text-[#10213D] capitalize flex items-center gap-1.5">
-                <span>{options.viewMode === 'exploded' ? 'Exploded View Active' : `${options.viewMode} Mode`}</span>
+                <span>{options.viewMode === 'exploded' ? 'Exploded View (Active)' : 'Exploded View'}</span>
                 <ChevronDown className="w-3.5 h-3.5 text-[#64748B]" />
               </div>
-              <div className="text-[11px] text-[#64748B]">
-                {options.viewMode === 'exploded' ? 'Motor components separated' : 'Click to toggle view'}
+              <div className="text-[11px] text-[#475569]">
+                {options.viewMode === 'exploded' ? 'Click to assemble motor' : 'Click to explode parts'}
               </div>
             </div>
           </button>

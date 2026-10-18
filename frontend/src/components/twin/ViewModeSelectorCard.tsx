@@ -49,7 +49,7 @@ export const ViewModeSelectorCard: React.FC<ViewModeSelectorCardProps> = ({
         <h3 className="text-sm font-bold text-[#10213D] tracking-tight">
           Change View Mode
         </h3>
-        <p className="text-xs text-[#64748B] mt-0.5">
+        <p className="text-xs text-[#475569] font-medium mt-0.5">
           Explore the motor in different views
         </p>
       </div>

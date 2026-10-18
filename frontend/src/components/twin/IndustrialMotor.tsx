@@ -42,7 +42,7 @@ export const IndustrialMotor: React.FC<IndustrialMotorProps> = ({
   const [hoveredId, setHoveredId] = useState<string | null>(null)
 
   // Animated exploded interpolation factor (0 = assembled, 1 = exploded)
-  const progressRef = useRef(options.viewMode === 'exploded' ? 1 : 0)
+  const progressRef = useRef(options.viewMode === 'exploded' || options.explodedView ? 1 : 0)
 
   // Section clipping plane for CAD Section View
   const sectionPlane = useMemo(() => {
@@ -122,7 +122,7 @@ export const IndustrialMotor: React.FC<IndustrialMotorProps> = ({
   // Continuous animation loop (shaft spin, fan rotation, vibrations, exploded view lerp)
   useFrame((state, delta) => {
     const time = state.clock.getElapsedTime()
-    const targetProgress = options.viewMode === 'exploded' ? 1 : 0
+    const targetProgress = (options.viewMode === 'exploded' || options.explodedView) ? 1 : 0
     progressRef.current = THREE.MathUtils.damp(progressRef.current, targetProgress, 6, delta)
     const p = progressRef.current
 

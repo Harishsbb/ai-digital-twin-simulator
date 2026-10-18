@@ -55,8 +55,6 @@ export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
     section: { label: 'Section View', icon: Scissors },
   }
 
-  const currentModeInfo = viewModeLabels[options.viewMode] || viewModeLabels.assembled
-  const CurrentIcon = currentModeInfo.icon
 
   return (
     <div
@@ -122,11 +120,22 @@ export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
             )}
           </div>
 
-          {/* Active Mode Royal Blue Badge */}
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1769FF] text-white text-xs font-semibold shadow-[0_2px_8px_rgba(23,105,255,0.25)]">
-            <CurrentIcon className="w-3.5 h-3.5 text-white" />
-            <span>{currentModeInfo.label}</span>
-          </div>
+          {/* Interactive Explode / Assemble View Toggle Button */}
+          <button
+            type="button"
+            onClick={() =>
+              onViewModeChange(options.viewMode === 'exploded' ? 'assembled' : 'exploded')
+            }
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95 ${
+              options.viewMode === 'exploded'
+                ? 'bg-[#1769FF] text-white hover:bg-[#0F54D6] shadow-[0_2px_8px_rgba(23,105,255,0.25)]'
+                : 'bg-[#EAF2FF] hover:bg-[#D9E8FF] text-[#1769FF] border border-[#BFDBFE] hover:border-[#1769FF]'
+            }`}
+            title={options.viewMode === 'exploded' ? 'Click to assemble motor back together' : 'Click to explode 3D motor view'}
+          >
+            <Layers className="w-3.5 h-3.5" />
+            <span>{options.viewMode === 'exploded' ? 'Assemble Motor' : 'Exploded View'}</span>
+          </button>
 
           {/* Toggle Labels Button */}
           <button

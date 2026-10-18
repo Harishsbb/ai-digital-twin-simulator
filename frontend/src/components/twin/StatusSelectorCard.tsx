@@ -17,7 +17,7 @@ export const StatusSelectorCard: React.FC<StatusSelectorCardProps> = ({
         <h3 className="text-sm font-bold text-[#10213D] tracking-tight">
           Machine Status (Test)
         </h3>
-        <p className="text-xs text-[#64748B] mt-0.5">
+        <p className="text-xs text-[#475569] font-medium mt-0.5">
           Select a status to see visual changes
         </p>
       </div>

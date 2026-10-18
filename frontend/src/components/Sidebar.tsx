@@ -84,7 +84,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 <div className="font-bold text-[#10213D] text-sm tracking-tight">
                   AI Digital Twin
                 </div>
-                <div className="text-xs text-[#64748B] font-medium">
+                <div className="text-xs text-[#475569] font-medium">
                   Simulator
                 </div>
               </div>
@@ -92,7 +92,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
             <button
               onClick={onClose}
-              className="lg:hidden p-1.5 rounded-lg text-[#64748B] hover:text-[#10213D] hover:bg-[#F1F5F9]"
+              className="lg:hidden p-1.5 rounded-lg text-[#475569] hover:text-[#10213D] hover:bg-[#F1F5F9]"
               title="Close Sidebar"
             >
               <X className="w-5 h-5" />
@@ -113,7 +113,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                     `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 relative ${
                       isActive
                         ? 'bg-[#EAF2FF] text-[#1769FF] font-semibold shadow-xs'
-                        : 'text-[#64748B] hover:text-[#10213D] hover:bg-[#F8FAFC]'
+                        : 'text-[#334155] hover:text-[#10213D] hover:bg-[#F1F5F9]'
                     }`
                   }
                 >
@@ -122,7 +122,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                       {isActive && (
                         <span className="absolute left-0 top-1.5 bottom-1.5 w-1 bg-[#1769FF] rounded-r-full" />
                       )}
-                      <Icon className={`w-5 h-5 shrink-0 ${isActive ? 'text-[#1769FF]' : 'text-[#64748B]'}`} />
+                      <Icon className={`w-5 h-5 shrink-0 ${isActive ? 'text-[#1769FF]' : 'text-[#475569]'}`} />
                       <span>{item.name}</span>
                     </>
                   )}

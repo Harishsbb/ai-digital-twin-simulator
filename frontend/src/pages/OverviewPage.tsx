@@ -165,18 +165,18 @@ export const OverviewPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Top Header / System Status Banner */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-6 rounded-2xl dark-panel shadow-xl">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-6 rounded-2xl bg-white border border-[#DFE7F3] shadow-[0_4px_20px_rgba(16,33,61,0.04)]">
         <div>
           <div className="flex items-center gap-2.5 mb-2">
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-blue-950/60 text-blue-400 border border-blue-800/40 font-semibold tracking-wider">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-[#EAF2FF] text-[#1769FF] border border-[#BFDBFE] font-bold tracking-wider">
               FACILITY // PLANT NORTH - BAY 04
             </span>
-            <span className="text-slate-400 font-mono text-xs">COORDINATES // 41.8781° N, 87.6298° W</span>
+            <span className="text-[#475569] font-mono text-xs font-semibold">COORDINATES // 41.8781° N, 87.6298° W</span>
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">
+          <h1 className="text-2xl font-bold text-[#10213D] tracking-tight">
             Asset Supervisor & Machine Architecture
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-[#475569] mt-1 font-medium">
             Target Machine: Siemens Simotics GP 150 kW High-Voltage Induction Motor (3-Phase, 4-Pole)
           </p>
         </div>
@@ -185,9 +185,9 @@ export const OverviewPage: React.FC = () => {
           <button
             onClick={loadBackendData}
             disabled={loading}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-xs font-medium text-blue-300 transition-all shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#EAF2FF] hover:bg-[#D9E8FF] border border-[#BFDBFE] text-xs font-semibold text-[#1769FF] transition-all shadow-xs cursor-pointer disabled:opacity-50"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-blue-400' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#1769FF]' : ''}`} />
             <span>Verify API Handshake</span>
           </button>
         </div>
@@ -205,9 +205,9 @@ export const OverviewPage: React.FC = () => {
             badge={<StatusBadge label="SCHEMATIC 2D" variant="laser" pulse={false} size="sm" />}
           >
             {/* Vector Blueprint Visualizer on Dark Technical Sheet */}
-            <div className="relative rounded-xl bg-[#0c121e] border border-slate-800 p-4 overflow-hidden shadow-inner">
+            <div className="relative rounded-xl bg-[#0B1528] border border-[#1E293B] p-4 overflow-hidden shadow-inner">
               {/* Technical drafting grid inside blueprint */}
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(56,189,248,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(56,189,248,0.03)_1px,transparent_1px)] bg-[size:20px_20px]" />
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(56,189,248,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(56,189,248,0.05)_1px,transparent_1px)] bg-[size:20px_20px]" />
 
               {/* Technical SVG Motor Blueprint */}
               <div className="relative z-10 py-4 flex items-center justify-center">
@@ -297,16 +297,16 @@ export const OverviewPage: React.FC = () => {
 
               {/* Bottom probe selector pill bar */}
               <div className="pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
-                <span className="text-slate-400 text-[11px] font-semibold">ACTIVE PROBE SELECTION:</span>
+                <span className="text-slate-300 text-[11px] font-bold">ACTIVE PROBE SELECTION:</span>
                 <div className="flex flex-wrap gap-1.5">
                   {SENSOR_HOTSPOTS.map((h) => (
                     <button
                       key={h.id}
                       onClick={() => setSelectedHotspot(h)}
-                      className={`px-3 py-1 rounded-lg text-xs font-mono border transition-all ${
+                      className={`px-3 py-1 rounded-lg text-xs font-mono border transition-all cursor-pointer ${
                         selectedHotspot.id === h.id
-                          ? 'bg-blue-600/30 text-blue-300 border-blue-500/60 font-semibold shadow-sm'
-                          : 'bg-[#111726] text-slate-400 border-slate-800 hover:text-slate-200'
+                          ? 'bg-[#1769FF] text-white border-[#1769FF] font-bold shadow-xs'
+                          : 'bg-[#132238] text-slate-300 border-slate-700 hover:text-white hover:bg-[#1E3A5F]'
                       }`}
                     >
                       {h.code}
@@ -317,30 +317,30 @@ export const OverviewPage: React.FC = () => {
             </div>
 
             {/* Selected Hotspot Detailed Specs Panel */}
-            <div className="mt-4 p-4 rounded-xl bg-[#0c121e] border border-slate-800/80 font-mono text-xs space-y-2">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-800/60">
+            <div className="mt-4 p-4 rounded-xl bg-[#F8FAFC] border border-[#DFE7F3] font-mono text-xs space-y-2.5 shadow-2xs">
+              <div className="flex items-center justify-between pb-2 border-b border-[#E2E8F0]">
                 <div className="flex items-center gap-2">
-                  <span className="text-blue-400 font-bold">{selectedHotspot.code}</span>
-                  <span className="text-white font-semibold">{selectedHotspot.name}</span>
+                  <span className="text-[#1769FF] font-bold">{selectedHotspot.code}</span>
+                  <span className="text-[#10213D] font-bold">{selectedHotspot.name}</span>
                 </div>
                 <StatusBadge label="PROBE READY" variant="success" pulse={false} size="sm" />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] pt-1">
                 <div>
-                  <span className="text-slate-500">Transducer:</span>{' '}
-                  <span className="text-slate-200">{selectedHotspot.type}</span>
+                  <span className="text-[#475569] font-semibold">Transducer:</span>{' '}
+                  <span className="text-[#10213D] font-bold">{selectedHotspot.type}</span>
                 </div>
                 <div>
-                  <span className="text-slate-500">Location:</span>{' '}
-                  <span className="text-slate-200">{selectedHotspot.location}</span>
+                  <span className="text-[#475569] font-semibold">Location:</span>{' '}
+                  <span className="text-[#10213D] font-bold">{selectedHotspot.location}</span>
                 </div>
                 <div>
-                  <span className="text-slate-500">Sampling Rate:</span>{' '}
-                  <span className="text-slate-200">{selectedHotspot.sampling}</span>
+                  <span className="text-[#475569] font-semibold">Sampling Rate:</span>{' '}
+                  <span className="text-[#10213D] font-bold">{selectedHotspot.sampling}</span>
                 </div>
                 <div>
-                  <span className="text-slate-500">Threshold:</span>{' '}
-                  <span className="text-amber-400 font-medium">{selectedHotspot.spec}</span>
+                  <span className="text-[#475569] font-semibold">Threshold:</span>{' '}
+                  <span className="text-[#B45309] font-bold">{selectedHotspot.spec}</span>
                 </div>
               </div>
             </div>
@@ -350,79 +350,79 @@ export const OverviewPage: React.FC = () => {
         {/* Right Column: Physical Rating Nameplate (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
           {/* Machine Nameplate */}
-          <div className="relative rounded-2xl dark-panel p-6 shadow-xl">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800/70 mb-4">
+          <div className="relative rounded-2xl bg-white border border-[#DFE7F3] p-6 shadow-[0_4px_20px_rgba(16,33,61,0.04)]">
+            <div className="flex items-center justify-between pb-3 border-b border-[#F1F5F9] mb-4">
               <div>
-                <h2 className="text-xs tracking-wider uppercase font-bold text-blue-400">
+                <h2 className="text-xs tracking-wider uppercase font-bold text-[#1769FF]">
                   EQUIPMENT NAMEPLATE // RATING DATA
                 </h2>
-                <p className="text-[11px] text-slate-400 mt-0.5">
+                <p className="text-[11px] text-[#475569] font-medium mt-0.5">
                   SIEMENS SIMOTICS GP 1LE1 HIGH EFFICIENCY MOTOR
                 </p>
               </div>
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-950/60 text-emerald-400 border border-emerald-800/40">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0]">
                 IE3 PREMIUM
               </span>
             </div>
 
             <div className="font-sans text-xs space-y-3">
-              <div className="grid grid-cols-2 gap-3 pb-2 border-b border-slate-800/50">
+              <div className="grid grid-cols-2 gap-3 pb-2.5 border-b border-[#F1F5F9]">
                 <div>
-                  <div className="text-[10px] text-slate-500 uppercase tracking-wider">RATED POWER</div>
-                  <div className="text-white font-bold text-sm mt-0.5">150 kW (200 HP)</div>
+                  <div className="text-[10px] text-[#475569] font-bold uppercase tracking-wider">RATED POWER</div>
+                  <div className="text-[#10213D] font-bold text-sm mt-0.5">150 kW (200 HP)</div>
                 </div>
                 <div>
-                  <div className="text-[10px] text-slate-500 uppercase tracking-wider">FRAME SIZE</div>
-                  <div className="text-white font-bold text-sm mt-0.5">315 M (Cast Iron)</div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-3 pb-2 border-b border-slate-800/50 text-[11px]">
-                <div>
-                  <div className="text-[10px] text-slate-500">VOLTAGE</div>
-                  <div className="text-slate-200 font-medium mt-0.5">400 V Δ / 690 V Y</div>
-                </div>
-                <div>
-                  <div className="text-[10px] text-slate-500">CURRENT</div>
-                  <div className="text-slate-200 font-medium mt-0.5">265 A / 153 A</div>
-                </div>
-                <div>
-                  <div className="text-[10px] text-slate-500">FREQUENCY</div>
-                  <div className="text-slate-200 font-medium mt-0.5">50 Hz</div>
+                  <div className="text-[10px] text-[#475569] font-bold uppercase tracking-wider">FRAME SIZE</div>
+                  <div className="text-[#10213D] font-bold text-sm mt-0.5">315 M (Cast Iron)</div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3 pb-2 border-b border-slate-800/50 text-[11px]">
+              <div className="grid grid-cols-3 gap-3 pb-2.5 border-b border-[#F1F5F9] text-[11px]">
                 <div>
-                  <div className="text-[10px] text-slate-500">SPEED (RPM)</div>
-                  <div className="text-blue-400 font-bold mt-0.5">1488 RPM</div>
+                  <div className="text-[10px] text-[#475569] font-bold uppercase tracking-wider">VOLTAGE</div>
+                  <div className="text-[#0F172A] font-bold mt-0.5">400 V Δ / 690 V Y</div>
                 </div>
                 <div>
-                  <div className="text-[10px] text-slate-500">COS φ (PF)</div>
-                  <div className="text-slate-200 font-medium mt-0.5">0.88</div>
+                  <div className="text-[10px] text-[#475569] font-bold uppercase tracking-wider">CURRENT</div>
+                  <div className="text-[#0F172A] font-bold mt-0.5">265 A / 153 A</div>
                 </div>
                 <div>
-                  <div className="text-[10px] text-slate-500">EFFICIENCY</div>
-                  <div className="text-emerald-400 font-bold mt-0.5">96.2 %</div>
+                  <div className="text-[10px] text-[#475569] font-bold uppercase tracking-wider">FREQUENCY</div>
+                  <div className="text-[#0F172A] font-bold mt-0.5">50 Hz</div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-[11px] pt-1">
+              <div className="grid grid-cols-3 gap-3 pb-2.5 border-b border-[#F1F5F9] text-[11px]">
                 <div>
-                  <span className="text-slate-500">ENCLOSURE:</span>{' '}
-                  <span className="text-slate-300">IP55 / IC411 TEFC</span>
+                  <div className="text-[10px] text-[#475569] font-bold uppercase tracking-wider">SPEED (RPM)</div>
+                  <div className="text-[#1769FF] font-bold mt-0.5">1488 RPM</div>
                 </div>
                 <div>
-                  <span className="text-slate-500">MASS:</span>{' '}
-                  <span className="text-slate-300">1,140 kg</span>
+                  <div className="text-[10px] text-[#475569] font-bold uppercase tracking-wider">COS φ (PF)</div>
+                  <div className="text-[#0F172A] font-bold mt-0.5">0.88</div>
                 </div>
                 <div>
-                  <span className="text-slate-500">INSULATION:</span>{' '}
-                  <span className="text-slate-300">Class 155 (F)</span>
+                  <div className="text-[10px] text-[#475569] font-bold uppercase tracking-wider">EFFICIENCY</div>
+                  <div className="text-[#059669] font-bold mt-0.5">96.2 %</div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2.5 text-[11px] pt-1">
+                <div>
+                  <span className="text-[#475569] font-bold">ENCLOSURE:</span>{' '}
+                  <span className="text-[#0F172A] font-semibold">IP55 / IC411 TEFC</span>
                 </div>
                 <div>
-                  <span className="text-slate-500">SERIAL NO:</span>{' '}
-                  <span className="text-blue-400 font-mono">SN-9042-DE-2026</span>
+                  <span className="text-[#475569] font-bold">MASS:</span>{' '}
+                  <span className="text-[#0F172A] font-semibold">1,140 kg</span>
+                </div>
+                <div>
+                  <span className="text-[#475569] font-bold">INSULATION:</span>{' '}
+                  <span className="text-[#0F172A] font-semibold">Class 155 (F)</span>
+                </div>
+                <div>
+                  <span className="text-[#475569] font-bold">SERIAL NO:</span>{' '}
+                  <span className="text-[#1769FF] font-mono font-bold">SN-9042-DE-2026</span>
                 </div>
               </div>
             </div>
@@ -445,33 +445,33 @@ export const OverviewPage: React.FC = () => {
             }
           >
             <div className="font-sans text-xs space-y-2.5">
-              <div className="flex items-center justify-between py-1.5 border-b border-slate-800/60">
-                <span className="text-slate-400">API Host URL</span>
-                <span className="text-white font-mono truncate max-w-[190px]" title={getApiBaseUrl()}>
+              <div className="flex items-center justify-between py-1.5 border-b border-[#F1F5F9]">
+                <span className="text-[#475569] font-medium">API Host URL</span>
+                <span className="text-[#10213D] font-mono font-bold truncate max-w-[190px]" title={getApiBaseUrl()}>
                   {getApiBaseUrl()}
                 </span>
               </div>
-              <div className="flex items-center justify-between py-1.5 border-b border-slate-800/60">
-                <span className="text-slate-400">Service Status</span>
-                <span className={healthData ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}>
+              <div className="flex items-center justify-between py-1.5 border-b border-[#F1F5F9]">
+                <span className="text-[#475569] font-medium">Service Status</span>
+                <span className={healthData ? 'text-[#059669] font-bold' : 'text-[#DC2626] font-bold'}>
                   {healthData ? healthData.status.toUpperCase() : 'OFFLINE'}
                 </span>
               </div>
-              <div className="flex items-center justify-between py-1.5 border-b border-slate-800/60">
-                <span className="text-slate-400">Build Version</span>
-                <span className="text-slate-200">{appInfo?.version || '0.1.0'}</span>
+              <div className="flex items-center justify-between py-1.5 border-b border-[#F1F5F9]">
+                <span className="text-[#475569] font-medium">Build Version</span>
+                <span className="text-[#10213D] font-mono font-bold">{appInfo?.version || '0.1.0'}</span>
               </div>
-              <div className="flex items-center justify-between py-1.5 border-b border-slate-800/60">
-                <span className="text-slate-400">Architecture Stage</span>
-                <span className="text-blue-400 font-medium">{appInfo?.stage || 'Step 2: 3D Twin'}</span>
+              <div className="flex items-center justify-between py-1.5 border-b border-[#F1F5F9]">
+                <span className="text-[#475569] font-medium">Architecture Stage</span>
+                <span className="text-[#1769FF] font-bold">{appInfo?.stage || 'Step 2: 3D Twin'}</span>
               </div>
-              <div className="flex items-center justify-between pt-1 text-[11px] text-slate-400">
-                <span>CORS Restriction:</span>
-                <span className="text-emerald-400 font-mono">http://localhost:5173 only</span>
+              <div className="flex items-center justify-between pt-1 text-[11px] text-[#475569]">
+                <span className="font-medium">CORS Restriction:</span>
+                <span className="text-[#059669] font-mono font-bold">http://localhost:5173 only</span>
               </div>
 
               {error && (
-                <div className="p-3 rounded-xl bg-rose-950/40 border border-rose-800/40 text-xs text-rose-300 mt-2">
+                <div className="p-3 rounded-xl bg-[#FEF2F2] border border-[#FECACA] text-xs text-[#991B1B] font-medium mt-2">
                   Notice: Backend API is unreachable at {getApiBaseUrl()}. Please ensure Uvicorn is running.
                 </div>
               )}
@@ -495,21 +495,21 @@ export const OverviewPage: React.FC = () => {
               <button
                 key={s.id}
                 onClick={() => setSelectedScenario(s)}
-                className={`p-4 rounded-xl border text-left transition-all ${
+                className={`p-4 rounded-xl border text-left transition-all cursor-pointer ${
                   selectedScenario.id === s.id
-                    ? 'bg-[#132238] border-blue-500/60 shadow-[0_0_20px_rgba(59,130,246,0.15)] ring-1 ring-blue-500/40'
-                    : 'bg-[#0c121e] border-slate-800/80 hover:border-slate-700 hover:bg-[#0f1726]'
+                    ? 'bg-[#EAF2FF] border-[#1769FF] shadow-xs ring-1 ring-[#1769FF]/30'
+                    : 'bg-white border-[#DFE7F3] hover:border-[#CBD5E1] hover:bg-[#F8FAFC]'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] text-slate-400 font-medium">{s.category}</span>
+                  <span className="text-[10px] text-[#475569] font-bold uppercase tracking-wider">{s.category}</span>
                   {selectedScenario.id === s.id && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_6px_rgba(56,189,248,0.8)]" />
+                    <span className="w-2 h-2 rounded-full bg-[#1769FF]" />
                   )}
                 </div>
                 <div
-                  className={`text-xs font-semibold ${
-                    selectedScenario.id === s.id ? 'text-white' : 'text-slate-300'
+                  className={`text-xs ${
+                    selectedScenario.id === s.id ? 'font-bold text-[#10213D]' : 'font-semibold text-[#334155]'
                   }`}
                 >
                   {s.name}
@@ -519,31 +519,31 @@ export const OverviewPage: React.FC = () => {
           </div>
 
           {/* Active Scenario Detail Box */}
-          <div className="p-5 rounded-xl bg-[#0c121e] border border-slate-800/80 space-y-3">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2.5 border-b border-slate-800/60">
+          <div className="p-5 rounded-xl bg-[#F8FAFC] border border-[#DFE7F3] space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2.5 border-b border-[#E2E8F0]">
               <div className="flex items-center gap-2.5">
-                <Terminal className="w-4 h-4 text-blue-400" />
-                <span className="text-xs font-bold text-white uppercase tracking-wide">
+                <Terminal className="w-4 h-4 text-[#1769FF]" />
+                <span className="text-xs font-bold text-[#10213D] uppercase tracking-wide">
                   {selectedScenario.name}
                 </span>
               </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-slate-900 text-slate-400 border border-slate-800">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-white text-[#475569] border border-[#DFE7F3] font-semibold">
                 SCENARIO ID: {selectedScenario.id.toUpperCase()}
               </span>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs text-[#334155] leading-relaxed font-medium">
               {selectedScenario.description}
             </p>
 
             <div className="pt-2 grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-              <div className="p-3.5 rounded-xl bg-[#080d16] border border-slate-800">
-                <div className="text-[10px] text-blue-400 font-bold mb-1 uppercase tracking-wider">MATHEMATICAL MODEL:</div>
-                <div className="text-slate-300 text-[11px] font-mono">{selectedScenario.mathModel}</div>
+              <div className="p-3.5 rounded-xl bg-white border border-[#DFE7F3] shadow-2xs">
+                <div className="text-[10px] text-[#1769FF] font-bold mb-1 uppercase tracking-wider">MATHEMATICAL MODEL:</div>
+                <div className="text-[#0F172A] text-[11px] font-mono font-semibold">{selectedScenario.mathModel}</div>
               </div>
-              <div className="p-3.5 rounded-xl bg-[#080d16] border border-slate-800">
-                <div className="text-[10px] text-amber-400 font-bold mb-1 uppercase tracking-wider">PLANNED TELEMETRY IMPACT:</div>
-                <div className="text-slate-300 text-[11px] font-mono">{selectedScenario.plannedImpact}</div>
+              <div className="p-3.5 rounded-xl bg-white border border-[#DFE7F3] shadow-2xs">
+                <div className="text-[10px] text-[#D97706] font-bold mb-1 uppercase tracking-wider">PLANNED TELEMETRY IMPACT:</div>
+                <div className="text-[#0F172A] text-[11px] font-mono font-semibold">{selectedScenario.plannedImpact}</div>
               </div>
             </div>
           </div>
@@ -558,59 +558,59 @@ export const OverviewPage: React.FC = () => {
         icon={Zap}
       >
         <div className="grid grid-cols-1 md:grid-cols-5 gap-3 pt-1">
-          <div className="p-4 rounded-xl border border-blue-500/50 bg-[#132238] shadow-md">
-            <div className="flex items-center justify-between text-xs font-bold text-blue-400 mb-1">
+          <div className="p-4 rounded-xl border border-[#A7F3D0] bg-[#ECFDF5] shadow-2xs">
+            <div className="flex items-center justify-between text-xs font-bold text-[#065F46] mb-1">
               <span>STEP 01</span>
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 text-[#10B981]" />
             </div>
-            <div className="text-xs font-bold text-white">Project Setup</div>
-            <p className="text-[11px] text-slate-300 mt-1">
+            <div className="text-xs font-bold text-[#10213D]">Project Setup</div>
+            <p className="text-[11px] text-[#475569] mt-1 font-medium">
               React + Vite + Tailwind shell, FastAPI backend, routing & health checks.
             </p>
-            <div className="mt-2 text-[10px] font-bold text-emerald-400 uppercase">
+            <div className="mt-2 text-[10px] font-bold text-[#059669] uppercase">
               COMPLETED
             </div>
           </div>
 
-          <div className="p-4 rounded-xl border border-blue-500/60 bg-[#162740] shadow-[0_0_15px_rgba(59,130,246,0.15)] ring-1 ring-blue-500/40">
-            <div className="flex items-center justify-between text-xs font-bold text-blue-300 mb-1">
+          <div className="p-4 rounded-xl border-2 border-[#1769FF] bg-[#EAF2FF]/60 shadow-xs">
+            <div className="flex items-center justify-between text-xs font-bold text-[#1769FF] mb-1">
               <span>STEP 02</span>
-              <span className="w-2 h-2 rounded-full bg-blue-400 animate-ping" />
+              <span className="w-2 h-2 rounded-full bg-[#1769FF] animate-ping" />
             </div>
-            <div className="text-xs font-bold text-white">3D Digital Twin</div>
-            <p className="text-[11px] text-slate-300 mt-1">
+            <div className="text-xs font-bold text-[#10213D]">3D Digital Twin</div>
+            <p className="text-[11px] text-[#334155] mt-1 font-medium">
               Interactive 3D motor model, OrbitControls, exploded view & status inspection.
             </p>
-            <div className="mt-2 text-[10px] font-bold text-blue-300 uppercase">
+            <div className="mt-2 text-[10px] font-bold text-[#1769FF] uppercase">
               ACTIVE STAGE
             </div>
           </div>
 
-          <div className="p-4 rounded-xl border border-slate-800 bg-[#0c121e] opacity-80">
-            <div className="text-xs font-bold text-slate-400 mb-1">STEP 03</div>
-            <div className="text-xs font-bold text-slate-200">Sensor Simulation</div>
-            <p className="text-[11px] text-slate-400 mt-1">
+          <div className="p-4 rounded-xl border border-[#DFE7F3] bg-[#F8FAFC]">
+            <div className="text-xs font-bold text-[#64748B] mb-1">STEP 03</div>
+            <div className="text-xs font-bold text-[#334155]">Sensor Simulation</div>
+            <p className="text-[11px] text-[#64748B] mt-1">
               Motor telemetry physics, vibration/temperature generation & WebSockets.
             </p>
-            <div className="mt-2 text-[10px] text-slate-500 uppercase">UPCOMING</div>
+            <div className="mt-2 text-[10px] font-bold text-[#94A3B8] uppercase">UPCOMING</div>
           </div>
 
-          <div className="p-4 rounded-xl border border-slate-800 bg-[#0c121e] opacity-80">
-            <div className="text-xs font-bold text-slate-400 mb-1">STEP 04</div>
-            <div className="text-xs font-bold text-slate-200">AI Anomaly Engine</div>
-            <p className="text-[11px] text-slate-400 mt-1">
+          <div className="p-4 rounded-xl border border-[#DFE7F3] bg-[#F8FAFC]">
+            <div className="text-xs font-bold text-[#64748B] mb-1">STEP 04</div>
+            <div className="text-xs font-bold text-[#334155]">AI Anomaly Engine</div>
+            <p className="text-[11px] text-[#64748B] mt-1">
               Unsupervised ML models, drift detection & health index scoring.
             </p>
-            <div className="mt-2 text-[10px] text-slate-500 uppercase">UPCOMING</div>
+            <div className="mt-2 text-[10px] font-bold text-[#94A3B8] uppercase">UPCOMING</div>
           </div>
 
-          <div className="p-4 rounded-xl border border-slate-800 bg-[#0c121e] opacity-80">
-            <div className="text-xs font-bold text-slate-400 mb-1">STEP 05</div>
-            <div className="text-xs font-bold text-slate-200">Alerts & Analytics</div>
-            <p className="text-[11px] text-slate-400 mt-1">
+          <div className="p-4 rounded-xl border border-[#DFE7F3] bg-[#F8FAFC]">
+            <div className="text-xs font-bold text-[#64748B] mb-1">STEP 05</div>
+            <div className="text-xs font-bold text-[#334155]">Alerts & Analytics</div>
+            <p className="text-[11px] text-[#64748B] mt-1">
               Threshold triggers, incident management & historical telemetry logs.
             </p>
-            <div className="mt-2 text-[10px] text-slate-500 uppercase">UPCOMING</div>
+            <div className="mt-2 text-[10px] font-bold text-[#94A3B8] uppercase">UPCOMING</div>
           </div>
         </div>
       </Card>

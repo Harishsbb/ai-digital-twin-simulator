@@ -52,7 +52,7 @@ export const Card: React.FC<CardProps> = ({
                 )}
               </div>
               {subtitle && (
-                <p className="text-xs text-[#64748B] mt-0.5 line-clamp-1">
+                <p className="text-xs text-[#475569] font-medium mt-0.5 line-clamp-1">
                   {subtitle}
                 </p>
               )}

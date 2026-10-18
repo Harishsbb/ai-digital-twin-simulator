@@ -183,7 +183,7 @@ export const ComponentDetailsCard: React.FC<ComponentDetailsCardProps> = ({
               <ChevronRight className="w-4 h-4 text-[#1769FF]" />
             </h3>
           </div>
-          <p className="text-xs text-[#64748B] mt-0.5 font-medium">
+          <p className="text-xs text-[#475569] mt-0.5 font-medium">
             {component.subtitle}
           </p>
         </div>
@@ -194,44 +194,44 @@ export const ComponentDetailsCard: React.FC<ComponentDetailsCardProps> = ({
         <div className="space-y-2.5 text-xs">
           {/* Function */}
           <div className="flex items-start justify-between py-1.5 border-b border-[#F1F5F9] gap-3">
-            <span className="text-[#64748B] font-medium shrink-0">Function</span>
-            <span className="text-[#10213D] text-right leading-relaxed font-normal">
+            <span className="text-[#475569] font-semibold shrink-0">Function</span>
+            <span className="text-[#10213D] text-right leading-relaxed font-medium">
               {component.functionDesc}
             </span>
           </div>
 
           {/* Material */}
           <div className="flex items-center justify-between py-1.5 border-b border-[#F1F5F9] gap-3">
-            <span className="text-[#64748B] font-medium shrink-0">Material</span>
-            <span className="text-[#10213D] text-right font-semibold">
+            <span className="text-[#475569] font-semibold shrink-0">Material</span>
+            <span className="text-[#10213D] text-right font-bold">
               {component.material}
             </span>
           </div>
 
           {/* Status */}
           <div className="flex items-center justify-between py-1.5 border-b border-[#F1F5F9] gap-3">
-            <span className="text-[#64748B] font-medium shrink-0">Status</span>
+            <span className="text-[#475569] font-semibold shrink-0">Status</span>
             <div>{getStatusBadge()}</div>
           </div>
 
           {/* Temperature Rating */}
           <div className="flex items-center justify-between py-1.5 border-b border-[#F1F5F9] gap-3">
-            <span className="text-[#64748B] font-medium shrink-0 flex items-center gap-1">
-              <Thermometer className="w-3.5 h-3.5 text-[#94A3B8]" />
+            <span className="text-[#475569] font-semibold shrink-0 flex items-center gap-1">
+              <Thermometer className="w-3.5 h-3.5 text-[#1769FF]" />
               Temperature
             </span>
-            <span className="text-[#10213D] text-right font-mono text-[11px] font-medium">
+            <span className="text-[#10213D] text-right font-mono text-[11px] font-bold">
               {component.temperatureRating}
             </span>
           </div>
 
           {/* Notes */}
           <div className="flex items-start justify-between py-1.5 border-b border-[#F1F5F9] gap-3">
-            <span className="text-[#64748B] font-medium shrink-0 flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#94A3B8]" />
+            <span className="text-[#475569] font-semibold shrink-0 flex items-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#10B981]" />
               Notes
             </span>
-            <span className="text-[#475569] text-right text-[11px] leading-relaxed">
+            <span className="text-[#334155] text-right text-[11px] leading-relaxed font-medium">
               {component.notes}
             </span>
           </div>

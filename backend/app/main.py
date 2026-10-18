@@ -1,9 +1,21 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import api_router
 from app.core.config import get_settings
+from app.services.sensor_simulator import get_sensor_simulator
 
 settings = get_settings()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifecycle manager handling background telemetry generation on startup and shutdown."""
+    simulator = get_sensor_simulator()
+    simulator.start_background_task()
+    yield
+    simulator.stop_background_task()
+
 
 app = FastAPI(
     title=settings.app_name,
@@ -12,6 +24,7 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url="/openapi.json",
+    lifespan=lifespan,
 )
 
 # Configure CORS restricted strictly to the local Vite development origin
@@ -33,11 +46,13 @@ async def root():
     return {
         "service": settings.app_name,
         "version": settings.app_version,
-        "stage": settings.app_stage,
+        "stage": "Step 5: Sensor Data Simulator",
         "status": "online",
         "docs_url": "/docs",
         "health_check": "/api/health",
         "app_info": "/api/v1/info",
+        "sensors_latest": "/api/v1/sensors/latest",
+        "sensors_ws": "/api/v1/sensors/ws",
     }
 
 

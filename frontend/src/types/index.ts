@@ -77,3 +77,49 @@ export interface TwinComponentInfo {
   nominalSpec: string
 }
 
+// ============================================================================
+// Step 5: Sensor Data Simulator Types
+// ============================================================================
+export type SimulatorMode = 'normal' | 'fault'
+
+export type SimulatorAction = 'start' | 'pause' | 'reset' | 'toggle_mode' | 'set_mode'
+
+export interface SensorReading {
+  device_id: string
+  timestamp: string
+  temperature: number
+  vibration: number
+  rpm: number
+  mode: SimulatorMode
+  is_running: boolean
+  sequence: number
+}
+
+export interface SimulatorConfig {
+  device_id: string
+  update_interval_sec: number
+  temp_baseline: number
+  temp_normal_min: number
+  temp_normal_max: number
+  vib_baseline: number
+  vib_normal_min: number
+  vib_normal_max: number
+  rpm_baseline: number
+  rpm_normal_min: number
+  rpm_normal_max: number
+  temp_fault_target: number
+  vib_fault_target: number
+  rpm_fault_target: number
+}
+
+export interface SimulatorStateResponse {
+  device_id: string
+  is_running: boolean
+  mode: SimulatorMode
+  sequence: number
+  uptime_seconds: number
+  connected_clients: number
+  latest_reading: SensorReading
+  config: SimulatorConfig
+}
+

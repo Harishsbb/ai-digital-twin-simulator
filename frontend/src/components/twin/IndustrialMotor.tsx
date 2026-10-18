@@ -77,12 +77,12 @@ export const IndustrialMotor: React.FC<IndustrialMotorProps> = ({
       case 'Normal':
       default:
         return {
-          stator: '#24476b',
-          statorDark: '#172f47',
-          accent: '#38bdf8',
-          bearingHub: '#1c3752',
-          shaft: '#f1f5f9',
-          fanCowl: '#182d43',
+          stator: '#1c5cb8',
+          statorDark: '#15458a',
+          accent: '#1769FF',
+          bearingHub: '#18478c',
+          shaft: '#f8fafc',
+          fanCowl: '#1a52a3',
           copper: '#ea580c',
           steel: '#cbd5e1',
         }

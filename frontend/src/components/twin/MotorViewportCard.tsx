@@ -61,7 +61,7 @@ export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
   return (
     <div
       ref={containerRef}
-      className={`rounded-2xl dark-panel overflow-hidden relative shadow-2xl transition-all border border-white/5 ${
+      className={`rounded-2xl bg-white overflow-hidden relative shadow-[0_4px_20px_rgba(16,33,61,0.04)] transition-all border border-[#DFE7F3] ${
         isFullscreen ? 'fixed inset-0 z-50 rounded-none' : 'h-[500px] lg:h-[580px]'
       }`}
     >
@@ -71,10 +71,10 @@ export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
       <div className="absolute top-4 left-5 right-5 z-20 flex items-center justify-between pointer-events-none">
         {/* Left: 3D Motor View Title */}
         <div className="flex items-center gap-2 pointer-events-auto">
-          <div className="w-6 h-6 rounded-lg bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-400">
-            <Box className="w-3.5 h-3.5" />
+          <div className="w-7 h-7 rounded-lg bg-[#EAF2FF] border border-[#BFDBFE] flex items-center justify-center text-[#1769FF] shadow-xs">
+            <Box className="w-4 h-4" />
           </div>
-          <span className="text-sm font-bold text-white tracking-wide drop-shadow-md">
+          <span className="text-sm font-bold text-[#10213D] tracking-tight">
             3D Motor View
           </span>
         </div>
@@ -86,15 +86,15 @@ export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
             <button
               type="button"
               onClick={() => setShowModeDropdown(!showModeDropdown)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#090f1c]/80 hover:bg-[#121c32] backdrop-blur-md border border-white/10 text-xs font-medium text-slate-300 hover:text-white transition-all shadow-md cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/95 hover:bg-white backdrop-blur-md border border-[#DFE7F3] text-xs font-semibold text-[#10213D] hover:border-[#CBD5E1] transition-all shadow-xs cursor-pointer"
             >
               <span>View Mode</span>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+              <ChevronDown className="w-3.5 h-3.5 text-[#64748B]" />
             </button>
 
             {/* Dropdown Menu */}
             {showModeDropdown && (
-              <div className="absolute right-0 top-full mt-2 w-44 rounded-xl bg-[#0b1220] border border-blue-500/20 shadow-2xl p-1.5 z-30 space-y-1 animate-in fade-in duration-150">
+              <div className="absolute right-0 top-full mt-2 w-44 rounded-xl bg-white border border-[#DFE7F3] shadow-xl p-1.5 z-30 space-y-1 animate-in fade-in duration-150">
                 {(['assembled', 'exploded', 'xray', 'section'] as TwinViewMode[]).map((mode) => {
                   const item = viewModeLabels[mode]
                   const Icon = item.icon
@@ -109,11 +109,11 @@ export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
                       }}
                       className={`w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
                         isActive
-                          ? 'bg-blue-600/30 text-blue-200 border border-blue-500/40'
-                          : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
+                          ? 'bg-[#EAF2FF] text-[#1769FF] font-semibold'
+                          : 'text-[#10213D] hover:bg-[#F8FAFC]'
                       }`}
                     >
-                      <Icon className="w-3.5 h-3.5 text-blue-400" />
+                      <Icon className="w-3.5 h-3.5 text-[#1769FF]" />
                       <span>{item.label}</span>
                     </button>
                   )
@@ -122,9 +122,9 @@ export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
             )}
           </div>
 
-          {/* Active Mode Glowing Badge */}
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600/20 border border-blue-500/40 text-xs font-semibold text-blue-300 shadow-[0_0_12px_rgba(59,130,246,0.25)]">
-            <CurrentIcon className="w-3.5 h-3.5 text-blue-400" />
+          {/* Active Mode Royal Blue Badge */}
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1769FF] text-white text-xs font-semibold shadow-[0_2px_8px_rgba(23,105,255,0.25)]">
+            <CurrentIcon className="w-3.5 h-3.5 text-white" />
             <span>{currentModeInfo.label}</span>
           </div>
 
@@ -134,10 +134,10 @@ export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
             onClick={() =>
               onOptionsChange((prev) => ({ ...prev, showLabels: !prev.showLabels }))
             }
-            className={`p-2 rounded-xl backdrop-blur-md border transition-all shadow-md hidden md:flex items-center justify-center cursor-pointer ${
+            className={`p-2 rounded-xl backdrop-blur-md border transition-all shadow-xs hidden md:flex items-center justify-center cursor-pointer ${
               options.showLabels
-                ? 'bg-blue-600/30 border-blue-400/50 text-blue-200'
-                : 'bg-[#090f1c]/80 hover:bg-[#121c32] border-white/10 text-slate-300 hover:text-white'
+                ? 'bg-[#EAF2FF] border-[#BFDBFE] text-[#1769FF]'
+                : 'bg-white/95 hover:bg-white border-[#DFE7F3] text-[#64748B] hover:text-[#10213D]'
             }`}
             title="Toggle Component Labels & Leader Lines"
           >
@@ -148,10 +148,10 @@ export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
           <button
             type="button"
             onClick={handleResetCamera}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#090f1c]/80 hover:bg-[#121c32] backdrop-blur-md border border-white/10 text-xs font-medium text-slate-300 hover:text-white transition-all shadow-md active:scale-95 cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/95 hover:bg-white backdrop-blur-md border border-[#DFE7F3] text-xs font-semibold text-[#10213D] hover:border-[#CBD5E1] transition-all shadow-xs active:scale-95 cursor-pointer"
             title="Reset View"
           >
-            <RotateCcw className="w-3.5 h-3.5 text-slate-400" />
+            <RotateCcw className="w-3.5 h-3.5 text-[#64748B]" />
             <span className="hidden sm:inline">Reset View</span>
           </button>
 
@@ -159,7 +159,7 @@ export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
           <button
             type="button"
             onClick={toggleFullscreen}
-            className="p-2 rounded-xl bg-[#090f1c]/80 hover:bg-[#121c32] backdrop-blur-md border border-white/10 text-slate-300 hover:text-white transition-all shadow-md cursor-pointer"
+            className="p-2 rounded-xl bg-white/95 hover:bg-white backdrop-blur-md border border-[#DFE7F3] text-[#64748B] hover:text-[#10213D] transition-all shadow-xs cursor-pointer"
             title={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
           >
             {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}

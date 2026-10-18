@@ -5,12 +5,24 @@
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
     --font-display: 'Space Grotesk', 'Inter', sans-serif;
+
+    /* Light Theme Tokens */
+    --color-bg-page: #F4F7FC;
+    --color-bg-card: #FFFFFF;
+    --color-primary: #1769FF;
+    --color-primary-hover: #0F54D6;
+    --color-text-heading: #10213D;
+    --color-text-secondary: #64748B;
+    --color-border: #DFE7F3;
+    --color-success: #10B981;
+    --color-warning: #F59E0B;
+    --color-danger: #EF4444;
   }
 
   body {
     font-family: var(--font-sans);
-    background-color: #080b11;
-    color: #f1f5f9;
+    background-color: #F4F7FC;
+    color: #10213D;
     overflow-x: hidden;
   }
 
@@ -23,41 +35,32 @@
     font-family: var(--font-display);
   }
 
-  /* Sleek dark scrollbar */
+  /* Refined light scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #090d15;
+    background: #F1F5F9;
   }
   ::-webkit-scrollbar-thumb {
-    background: #1c2638;
+    background: #CBD5E1;
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #2a3952;
+    background: #94A3B8;
   }
 }
 
-/* Futuristic deep navy card panel matching the visual reference */
+/* Premium Light Panel Card */
+.light-panel,
 .dark-panel {
-  background-color: #0f1422;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+  background-color: #FFFFFF;
+  border: 1px solid #DFE7F3;
+  box-shadow: 0 4px 20px -2px rgba(16, 33, 61, 0.04), 0 2px 6px -1px rgba(16, 33, 61, 0.02);
 }
 
+.light-panel:hover,
 .dark-panel:hover {
-  border-color: rgba(255, 255, 255, 0.12);
-}
-
-/* Glowing turntable pedestal animation */
-@keyframes pulse-ring {
-  0% { transform: scale(0.98); opacity: 0.6; }
-  50% { transform: scale(1.02); opacity: 0.9; }
-  100% { transform: scale(0.98); opacity: 0.6; }
-}
-
-.animate-pulse-ring {
-  animation: pulse-ring 4s ease-in-out infinite;
+  border-color: #CBD5E1;
 }

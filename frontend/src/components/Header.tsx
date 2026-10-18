@@ -50,39 +50,42 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   }, [])
 
   return (
-    <header className="h-18 px-6 lg:px-8 flex items-center justify-between border-b border-slate-800/60 bg-[#080b11]/80 backdrop-blur-md sticky top-0 z-30">
+    <header className="h-18 px-6 lg:px-8 flex items-center justify-between border-b border-[#DFE7F3] bg-[#F4F7FC]/90 backdrop-blur-md sticky top-0 z-30">
       {/* Mobile Toggle & Search Input */}
-      <div className="flex items-center gap-4 flex-1 max-w-md">
+      <div className="flex items-center gap-4 flex-1 max-w-lg">
         <button
           onClick={onToggleSidebar}
-          className="lg:hidden p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-100"
+          className="lg:hidden p-2 rounded-xl bg-white border border-[#DFE7F3] text-[#64748B] hover:text-[#10213D] shadow-xs"
           title="Toggle Navigation Menu"
         >
           <Menu className="w-5 h-5" />
         </button>
 
-        {/* Search Bar matching reference */}
-        <div className="relative w-full max-w-sm">
-          <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+        {/* Search Bar matching reference image with Ctrl K shortcut */}
+        <div className="relative w-full max-w-md">
+          <Search className="w-4 h-4 text-[#94A3B8] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search..."
-            className="w-full bg-[#111726] border border-slate-800/80 rounded-xl pl-10 pr-4 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/50 transition-colors"
+            placeholder="Search components, settings, documentation..."
+            className="w-full bg-white border border-[#DFE7F3] rounded-xl pl-10 pr-16 py-2 text-xs text-[#10213D] placeholder-[#94A3B8] focus:outline-none focus:border-[#1769FF] focus:ring-2 focus:ring-[#1769FF]/10 shadow-xs transition-all"
           />
+          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded-md bg-[#F1F5F9] border border-[#DFE7F3] text-[10px] font-semibold text-[#64748B] pointer-events-none">
+            Ctrl K
+          </kbd>
         </div>
       </div>
 
       {/* Right Actions: System Status, Notifications, Profile */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 sm:gap-4">
         {/* System Online Status Pill */}
         <button
           onClick={checkHealth}
-          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all ${
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer shadow-xs ${
             connected
-              ? 'bg-emerald-950/40 text-emerald-400 border-emerald-800/40'
+              ? 'bg-[#ECFDF5] text-[#065F46] border-[#A7F3D0]'
               : connected === false
-              ? 'bg-rose-950/40 text-rose-400 border-rose-800/40'
-              : 'bg-emerald-950/40 text-emerald-400 border-emerald-800/40'
+              ? 'bg-[#FEF2F2] text-[#991B1B] border-[#FECACA]'
+              : 'bg-[#ECFDF5] text-[#065F46] border-[#A7F3D0]'
           }`}
           title={
             connected
@@ -90,33 +93,29 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
               : 'Backend checking / Click to ping'
           }
         >
-          <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+          <span className="w-2 h-2 rounded-full bg-[#10B981]" />
           <span>System Online</span>
         </button>
 
         {/* Notifications Icon with Badge Dot */}
         <button
-          className="relative p-2.5 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-colors"
+          className="relative p-2 rounded-xl bg-white border border-[#DFE7F3] text-[#64748B] hover:text-[#10213D] hover:border-[#CBD5E1] transition-all shadow-xs cursor-pointer"
           title="Notifications"
         >
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.8)]" />
+          <Bell className="w-4 h-4" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#EF4444]" />
         </button>
 
-        {/* User Profile */}
-        <div className="flex items-center gap-3 pl-2 border-l border-slate-800/80 cursor-pointer group">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white text-xs font-semibold shadow-md">
+        {/* User Profile Card */}
+        <div className="flex items-center gap-2.5 pl-2 border-l border-[#DFE7F3]">
+          <div className="w-9 h-9 rounded-full bg-[#6366F1] flex items-center justify-center font-bold text-white text-xs shadow-xs">
             H
           </div>
           <div className="hidden sm:block text-left leading-tight">
-            <div className="text-xs font-semibold text-slate-100 group-hover:text-blue-400 transition-colors">
-              Harish
-            </div>
-            <div className="text-[11px] text-slate-400">
-              Developer
-            </div>
+            <div className="text-xs font-bold text-[#10213D]">Harish</div>
+            <div className="text-[11px] text-[#64748B] font-medium">Developer</div>
           </div>
-          <ChevronDown className="w-4 h-4 text-slate-500 group-hover:text-slate-300 transition-colors hidden sm:block" />
+          <ChevronDown className="w-4 h-4 text-[#94A3B8] hidden sm:block" />
         </div>
       </div>
     </header>

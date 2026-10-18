@@ -18,7 +18,6 @@ interface MotorSceneProps {
 }
 
 // Camera positioned at 3/4 isometric angle matching the reference image
-// (front-left perspective showing shaft, cooling fins, terminal box, and glowing pedestal)
 const DEFAULT_CAMERA_POS: [number, number, number] = [-3.8, 2.0, 3.8]
 const DEFAULT_TARGET: [number, number, number] = [0, 0.05, 0]
 
@@ -38,7 +37,7 @@ export const MotorScene = forwardRef<MotorSceneHandle, MotorSceneProps>(
     }))
 
     return (
-      <div className="w-full h-full relative overflow-hidden select-none bg-radial from-[#121b2b] via-[#0b111a] to-[#06090e]">
+      <div className="w-full h-full relative overflow-hidden select-none bg-gradient-to-b from-[#EAEFF7] via-[#F4F7FB] to-[#FFFFFF]">
         <Canvas
           shadows
           gl={{
@@ -46,7 +45,7 @@ export const MotorScene = forwardRef<MotorSceneHandle, MotorSceneProps>(
             alpha: true,
             powerPreference: 'high-performance',
             toneMapping: THREE.ACESFilmicToneMapping,
-            toneMappingExposure: 1.22,
+            toneMappingExposure: 1.05,
             localClippingEnabled: true,
           }}
           className="w-full h-full"
@@ -66,7 +65,7 @@ export const MotorScene = forwardRef<MotorSceneHandle, MotorSceneProps>(
             dampingFactor={0.06}
             minDistance={2.0}
             maxDistance={10}
-            maxPolarAngle={Math.PI / 2 + 0.05} // Prevent camera from dipping beneath floor
+            maxPolarAngle={Math.PI / 2 + 0.02} // Prevent camera from dipping beneath floor
             autoRotate={options.autoRotate}
             autoRotateSpeed={options.rotationSpeed * 1.5}
             target={DEFAULT_TARGET}
@@ -80,102 +79,57 @@ export const MotorScene = forwardRef<MotorSceneHandle, MotorSceneProps>(
           </Suspense>
 
           {/* ========================================================= */}
-          {/* Multi-Point High-Fidelity Studio Lighting System          */}
+          {/* Crisp Daylight Studio Lighting System                     */}
           {/* ========================================================= */}
-          {/* Ambient Fill */}
-          <ambientLight intensity={1.1} color="#f0f9ff" />
+          {/* Soft Daylight Ambient Fill */}
+          <ambientLight intensity={1.35} color="#f8fafc" />
 
-          {/* Key Light from top-left: casts crisp highlights across cooling fins */}
+          {/* Key Light from top-left */}
           <directionalLight
-            position={[-4.5, 7.5, 5]}
-            intensity={2.4}
+            position={[-4.5, 8.5, 5.5]}
+            intensity={2.2}
             castShadow
             shadow-mapSize={[2048, 2048]}
             shadow-bias={-0.0001}
             color="#ffffff"
           />
 
-          {/* Front Highlight: ensures metallic shaft & front end-shield glisten */}
+          {/* Front Highlight: highlights metallic shaft, bearings & end-shield */}
           <directionalLight
             position={[-2.5, 2.5, 6]}
-            intensity={1.6}
-            color="#e2f1fd"
+            intensity={1.2}
+            color="#f1f5f9"
           />
 
-          {/* Right-Side Fill Light: illuminates the stator side fins */}
+          {/* Right-Side Soft Fill Light */}
           <directionalLight
-            position={[6, 3.5, 1]}
-            intensity={1.8}
-            color="#93c5fd"
+            position={[6, 4, 1]}
+            intensity={1.1}
+            color="#e2e8f0"
           />
 
-          {/* Rear Rim Light: catches back edges and fan cowl */}
+          {/* Rear Rim Light for fin edge definition */}
           <directionalLight
             position={[2, 6, -6]}
-            intensity={2.2}
-            color="#38bdf8"
+            intensity={1.4}
+            color="#cbd5e1"
           />
 
           {/* Overhead Softbox Light */}
           <directionalLight
             position={[0, 9, 0]}
-            intensity={1.2}
+            intensity={1.0}
             color="#ffffff"
           />
 
-          {/* Glowing Pedestal Floor Glow (Upward Bounce) */}
-          <pointLight
-            position={[0, -0.9, 0]}
-            intensity={1.2}
-            distance={5.5}
-            color="#38bdf8"
-          />
-
-          {/* ========================================================= */}
-          {/* Industrial Turntable Pedestal (Matching Visual Reference) */}
-          {/* ========================================================= */}
-          <group position={[0, -1.22, 0]}>
-            {/* Outer Cyan Laser Glow Ring */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, 0]}>
-              <ringGeometry args={[2.22, 2.27, 80]} />
-              <meshBasicMaterial color="#38bdf8" transparent opacity={0.85} />
-            </mesh>
-
-            {/* Cyan Floor Aura Glow */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, 0]}>
-              <ringGeometry args={[2.08, 2.42, 80]} />
-              <meshBasicMaterial color="#0284c7" transparent opacity={0.22} />
-            </mesh>
-
-            {/* Inner Turntable Disc (Heavy Dark Steel Plate) */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
-              <cylinderGeometry args={[2.22, 2.24, 0.04, 64]} />
-              <meshStandardMaterial
-                color="#0c121d"
-                roughness={0.45}
-                metalness={0.65}
-              />
-            </mesh>
-
-            {/* Turntable Beveled Edge Trim */}
-            <mesh position={[0, -0.02, 0]}>
-              <cylinderGeometry args={[2.26, 2.28, 0.04, 64]} />
-              <meshStandardMaterial
-                color="#172236"
-                roughness={0.3}
-                metalness={0.8}
-              />
-            </mesh>
-          </group>
-
-          {/* Soft Ground Contact Shadow */}
+          {/* Clean Studio Floor Shadow */}
           <ContactShadows
             position={[0, -1.215, 0]}
-            opacity={0.82}
+            opacity={0.35}
             scale={7.5}
-            blur={1.4}
+            blur={1.8}
             far={2.5}
-            color="#000000"
+            color="#334155"
           />
 
           {/* 3D Realistic Industrial Electric Motor Mesh */}

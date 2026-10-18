@@ -22,60 +22,63 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
     { bg: string; text: string; dot: string; border: string }
   > = {
     success: {
-      bg: 'bg-emerald-950/40',
-      text: 'text-emerald-400',
-      dot: 'bg-emerald-500',
-      border: 'border-emerald-800/50',
+      bg: 'bg-[#ECFDF5]',
+      text: 'text-[#065F46]',
+      dot: 'bg-[#10B981]',
+      border: 'border-[#A7F3D0]',
     },
     warning: {
-      bg: 'bg-amber-950/40',
-      text: 'text-amber-400',
-      dot: 'bg-amber-500',
-      border: 'border-amber-800/50',
+      bg: 'bg-[#FFFBEB]',
+      text: 'text-[#92400E]',
+      dot: 'bg-[#F59E0B]',
+      border: 'border-[#FDE68A]',
     },
     error: {
-      bg: 'bg-rose-950/40',
-      text: 'text-rose-400',
-      dot: 'bg-rose-500',
-      border: 'border-rose-800/50',
+      bg: 'bg-[#FEF2F2]',
+      text: 'text-[#991B1B]',
+      dot: 'bg-[#EF4444]',
+      border: 'border-[#FECACA]',
     },
     info: {
-      bg: 'bg-blue-950/40',
-      text: 'text-blue-400',
-      dot: 'bg-blue-500',
-      border: 'border-blue-800/50',
+      bg: 'bg-[#EAF2FF]',
+      text: 'text-[#1769FF]',
+      dot: 'bg-[#1769FF]',
+      border: 'border-[#BFDBFE]',
     },
     laser: {
-      bg: 'bg-sky-950/40',
-      text: 'text-sky-400',
-      dot: 'bg-sky-400',
-      border: 'border-sky-800/50',
+      bg: 'bg-[#F0F9FF]',
+      text: 'text-[#0284C7]',
+      dot: 'bg-[#0284C7]',
+      border: 'border-[#BAE6FD]',
     },
     neutral: {
-      bg: 'bg-slate-900',
-      text: 'text-slate-300',
-      dot: 'bg-slate-400',
-      border: 'border-slate-800',
+      bg: 'bg-[#F1F5F9]',
+      text: 'text-[#475569]',
+      dot: 'bg-[#64748B]',
+      border: 'border-[#DFE7F3]',
     },
   }
 
-  const s = variantStyles[variant]
-  const sizeClasses =
-    size === 'sm'
-      ? 'px-2 py-0.5 text-[10px] gap-1.5'
-      : 'px-2.5 py-1 text-xs gap-2'
+  const currentVariant = variantStyles[variant] || variantStyles.neutral
+
+  const sizeClasses = {
+    sm: 'text-[11px] px-2 py-0.5 gap-1.5',
+    md: 'text-xs px-2.5 py-1 gap-2',
+  }[size]
 
   return (
     <span
-      className={`inline-flex items-center rounded-full font-medium tracking-wide border ${s.bg} ${s.text} ${s.border} shadow-sm ${sizeClasses} ${className}`}
+      className={`inline-flex items-center font-semibold rounded-full border shadow-2xs ${currentVariant.bg} ${currentVariant.text} ${currentVariant.border} ${sizeClasses} ${className}`}
     >
-      <span className="relative flex h-2 w-2 shrink-0">
+      <span className="relative flex h-2 w-2">
         {pulse && (
           <span
-            className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${s.dot}`}
+            className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${currentVariant.dot}`}
           />
         )}
-        <span className={`relative inline-flex rounded-full h-2 w-2 ${s.dot}`} />
+        <span
+          className={`relative inline-flex rounded-full h-2 w-2 ${currentVariant.dot}`}
+        />
       </span>
       <span>{label}</span>
     </span>

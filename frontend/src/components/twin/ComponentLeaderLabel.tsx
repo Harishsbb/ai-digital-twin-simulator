@@ -41,8 +41,8 @@ export const ComponentLeaderLabel: React.FC<ComponentLeaderLabelProps> = ({
     return new THREE.BufferGeometry().setFromPoints(pts)
   }, [ax, ay, az, lx, ly, lz])
 
-  const lineColor = isSelected ? '#38bdf8' : isHovered ? '#60a5fa' : '#3b82f6'
-  const lineOpacity = isSelected ? 0.95 : isHovered ? 0.8 : 0.45
+  const lineColor = isSelected ? '#1769FF' : isHovered ? '#2563EB' : '#3B82F6'
+  const lineOpacity = isSelected ? 0.95 : isHovered ? 0.8 : 0.55
 
   if (!visible) {
     return null
@@ -52,9 +52,9 @@ export const ComponentLeaderLabel: React.FC<ComponentLeaderLabelProps> = ({
     <group>
       {/* 3D Anchor Pin on Component Surface */}
       <mesh position={[ax, ay, az]}>
-        <sphereGeometry args={[0.032, 16, 16]} />
+        <sphereGeometry args={[0.03, 16, 16]} />
         <meshBasicMaterial
-          color={isSelected ? '#38bdf8' : isHovered ? '#60a5fa' : '#38bdf8'}
+          color={isSelected ? '#1769FF' : '#2563EB'}
           transparent
           opacity={0.9}
         />
@@ -63,8 +63,8 @@ export const ComponentLeaderLabel: React.FC<ComponentLeaderLabelProps> = ({
       {/* Anchor Ring Pulse */}
       {(isSelected || isHovered) && (
         <mesh position={[ax, ay, az]}>
-          <ringGeometry args={[0.045, 0.065, 24]} />
-          <meshBasicMaterial color="#38bdf8" side={THREE.DoubleSide} transparent opacity={0.7} />
+          <ringGeometry args={[0.04, 0.06, 24]} />
+          <meshBasicMaterial color="#1769FF" side={THREE.DoubleSide} transparent opacity={0.6} />
         </mesh>
       )}
 
@@ -84,7 +84,7 @@ export const ComponentLeaderLabel: React.FC<ComponentLeaderLabelProps> = ({
 
       {/* End Terminal Dot near the Label */}
       <mesh position={[lx, ly, lz]}>
-        <sphereGeometry args={[0.02, 12, 12]} />
+        <sphereGeometry args={[0.018, 12, 12]} />
         <meshBasicMaterial color={lineColor} transparent opacity={lineOpacity} />
       </mesh>
 
@@ -104,22 +104,22 @@ export const ComponentLeaderLabel: React.FC<ComponentLeaderLabelProps> = ({
           }}
           onMouseEnter={() => onHover(component.id)}
           onMouseLeave={() => onHover(null)}
-          className={`group flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all duration-200 shadow-xl backdrop-blur-md cursor-pointer select-none ${
+          className={`group flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer select-none ${
             isSelected
-              ? 'bg-[#133056] text-white border border-[#38bdf8] shadow-[0_0_18px_rgba(56,189,248,0.5)] scale-105'
+              ? 'bg-[#1769FF] text-white border border-[#1769FF] shadow-[0_4px_14px_rgba(23,105,255,0.35)] scale-105'
               : isHovered
-              ? 'bg-[#0f1e36] text-[#7dd3fc] border border-blue-400/80 shadow-[0_0_12px_rgba(56,189,248,0.3)]'
-              : 'bg-[#0a111e]/90 text-slate-300 border border-blue-500/35 hover:border-blue-400 hover:text-white'
+              ? 'bg-[#F0F6FF] text-[#1769FF] border border-[#BFDBFE] shadow-[0_2px_10px_rgba(23,105,255,0.12)]'
+              : 'bg-white/95 text-[#10213D] border border-[#DFE7F3] hover:border-[#1769FF] hover:text-[#1769FF] shadow-[0_2px_8px_rgba(16,33,61,0.06)]'
           }`}
           title={`Click to inspect ${component.name}`}
         >
           <span
             className={`w-1.5 h-1.5 rounded-full shrink-0 transition-colors ${
               isSelected
-                ? 'bg-[#38bdf8] shadow-[0_0_6px_#38bdf8]'
+                ? 'bg-white shadow-[0_0_4px_#ffffff]'
                 : isHovered
-                ? 'bg-blue-400'
-                : 'bg-blue-500/50'
+                ? 'bg-[#1769FF]'
+                : 'bg-[#3B82F6]'
             }`}
           />
           <span className="tracking-tight">{component.name}</span>

@@ -44,15 +44,12 @@ export const ViewModeSelectorCard: React.FC<ViewModeSelectorCardProps> = ({
   ]
 
   return (
-    <div className="dark-panel rounded-2xl p-6 shadow-xl border border-white/5 relative overflow-hidden flex flex-col justify-between">
-      {/* Subtle top ambient glow */}
-      <div className="absolute top-0 left-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl pointer-events-none" />
-
+    <div className="bg-white rounded-2xl p-6 shadow-[0_4px_20px_rgba(16,33,61,0.04)] border border-[#DFE7F3] flex flex-col justify-between">
       <div>
-        <h3 className="text-sm font-bold text-white tracking-wide">
+        <h3 className="text-sm font-bold text-[#10213D] tracking-tight">
           Change View Mode
         </h3>
-        <p className="text-xs text-slate-400 mt-0.5">
+        <p className="text-xs text-[#64748B] mt-0.5">
           Explore the motor in different views
         </p>
       </div>
@@ -69,20 +66,20 @@ export const ViewModeSelectorCard: React.FC<ViewModeSelectorCardProps> = ({
               onClick={() => onSelectMode(mode.id)}
               className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all text-center cursor-pointer group ${
                 isActive
-                  ? 'bg-[#102542] border-[#38bdf8] text-white shadow-[0_0_16px_rgba(56,189,248,0.3)] ring-1 ring-[#38bdf8]/40'
-                  : 'bg-[#0b121e]/80 border-white/5 text-slate-300 hover:bg-[#121c2e] hover:border-slate-700 hover:text-white'
+                  ? 'bg-[#EAF2FF] border-[#1769FF] text-[#1769FF] shadow-[0_2px_8px_rgba(23,105,255,0.15)] ring-1 ring-[#1769FF]/30'
+                  : 'bg-white border-[#DFE7F3] text-[#475569] hover:bg-[#F8FAFC] hover:border-[#CBD5E1] hover:text-[#10213D]'
               }`}
             >
               <div
                 className={`w-8 h-8 rounded-lg flex items-center justify-center mb-1.5 transition-colors ${
                   isActive
-                    ? 'bg-blue-500/20 text-[#38bdf8]'
-                    : 'bg-slate-800/80 text-slate-400 group-hover:text-blue-400'
+                    ? 'bg-[#1769FF]/15 text-[#1769FF]'
+                    : 'bg-[#F1F5F9] text-[#64748B] group-hover:text-[#1769FF]'
                 }`}
               >
                 <Icon className="w-4 h-4" />
               </div>
-              <span className="text-xs font-semibold tracking-tight">
+              <span className={`text-xs tracking-tight ${isActive ? 'font-bold' : 'font-medium'}`}>
                 {mode.label}
               </span>
             </button>

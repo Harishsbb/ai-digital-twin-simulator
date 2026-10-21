@@ -1,13 +1,8 @@
 import os
-import subprocess
 import sys
 
-# Automatically switch to the project's virtual environment if invoked via global python
-current_dir = os.path.dirname(os.path.abspath(__file__))
-venv_python = os.path.join(current_dir, "venv", "Scripts", "python.exe")
-
-if os.path.exists(venv_python) and os.path.normcase(sys.executable) != os.path.normcase(venv_python):
-    sys.exit(subprocess.call([venv_python] + sys.argv))
+# Ensure backend directory is in sys.path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import uvicorn
 

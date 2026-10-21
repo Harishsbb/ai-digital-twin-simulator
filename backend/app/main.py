@@ -53,7 +53,11 @@ async def root():
         "app_info": "/api/v1/info",
         "sensors_latest": "/api/v1/sensors/latest",
         "sensors_ws": "/api/v1/sensors/ws",
+        "ai_status": "/api/v1/ai/status",
+        "ai_latest": "/api/v1/ai/latest",
+        "ai_metrics": "/api/v1/ai/metrics",
     }
+
 
 
 if __name__ == "__main__":

@@ -135,4 +135,82 @@ export interface LiveMotorTelemetry {
   timestamp: string
 }
 
+// ============================================================================
+// Step 7: AI Anomaly Detection Types
+// ============================================================================
+export interface DiagnosticContext {
+  summary: string
+  deviations: string[]
+  inlier_status: string
+}
+
+export interface AnomalyPredictionInput {
+  temperature: number
+  vibration: number
+  rpm: number
+  device_id?: string
+  timestamp?: string
+}
+
+export interface AnomalyPredictionResponse {
+  device_id: string
+  timestamp: string
+  is_anomaly: boolean
+  prediction: number // 1 for inlier, -1 for anomaly
+  anomaly_score: number
+  model_name: string
+  model_version: string
+  source: string
+  features_evaluated: {
+    temperature: number
+    vibration: number
+    rpm: number
+  }
+  diagnostic_context: DiagnosticContext
+}
+
+export interface AIModelStatusResponse {
+  model_loaded: boolean
+  status: 'ready' | 'not_loaded' | 'degraded'
+  model_name: string
+  model_version: string
+  algorithm: string
+  features: string[]
+  feature_units: Record<string, string>
+  training_sample_count?: number
+  contamination?: number
+  trained_at?: string
+}
+
+export interface AIModelMetricsResponse {
+  model_name: string
+  model_version: string
+  evaluation_summary: {
+    evaluation_sample_count: number
+    normal_sample_count: number
+    fault_sample_count: number
+    confusion_matrix: {
+      true_negatives: number
+      false_positives: number
+      false_negatives: number
+      true_positives: number
+    }
+    accuracy: number
+    precision: number
+    recall: number
+    f1_score: number
+    false_positive_rate: number
+    scenario_breakdown: Record<string, {
+      sample_count: number
+      detection_rate?: number
+      inlier_retention_rate?: number
+      mean_anomaly_score: number
+      detected_anomaly_count?: number
+      false_positive_count?: number
+    }>
+    disclaimer: string
+  }
+  disclaimer: string
+}
+
 

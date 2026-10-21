@@ -123,3 +123,16 @@ export interface SimulatorStateResponse {
   config: SimulatorConfig
 }
 
+// Step 6: Live 3D Twin Telemetry Types
+export type TelemetryConnectionStatus = 'Connected' | 'Disconnected' | 'Stale Data'
+
+export interface LiveMotorTelemetry {
+  rpm: number
+  vibration: number
+  temperature: number
+  isRunning: boolean
+  mode: SimulatorMode
+  timestamp: string
+}
+
+

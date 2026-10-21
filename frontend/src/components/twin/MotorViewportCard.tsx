@@ -11,7 +11,17 @@ import {
   Tag,
 } from 'lucide-react'
 import { MotorScene, type MotorSceneHandle } from './MotorScene'
-import type { TwinViewMode, TwinViewOptions, TwinVisualStatus } from '../../types'
+import { LiveSensorOverlay } from './LiveSensorOverlay'
+import type {
+  LiveMotorTelemetry,
+  SensorReading,
+  SimulatorAction,
+  SimulatorMode,
+  TelemetryConnectionStatus,
+  TwinViewMode,
+  TwinViewOptions,
+  TwinVisualStatus,
+} from '../../types'
 
 interface MotorViewportCardProps {
   status: TwinVisualStatus
@@ -20,6 +30,14 @@ interface MotorViewportCardProps {
   selectedComponentId: string | null
   onSelectComponent?: (componentId: string) => void
   onViewModeChange: (mode: TwinViewMode) => void
+  liveTelemetry?: LiveMotorTelemetry | null
+  sensorReading?: SensorReading | null
+  connectionStatus?: TelemetryConnectionStatus
+  lastReceivedAt?: number | null
+  isSimulatorRunning?: boolean
+  currentMode?: SimulatorMode
+  onControl?: (action: SimulatorAction, mode?: SimulatorMode) => Promise<void>
+  onToggleMode?: () => Promise<void>
 }
 
 export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
@@ -29,6 +47,14 @@ export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
   selectedComponentId,
   onSelectComponent,
   onViewModeChange,
+  liveTelemetry,
+  sensorReading,
+  connectionStatus = 'Disconnected',
+  lastReceivedAt = null,
+  isSimulatorRunning = true,
+  currentMode = 'normal',
+  onControl,
+  onToggleMode,
 }) => {
   const sceneRef = useRef<MotorSceneHandle>(null)
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false)
@@ -60,7 +86,7 @@ export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
     <div
       ref={containerRef}
       className={`rounded-2xl bg-white overflow-hidden relative shadow-[0_4px_20px_rgba(16,33,61,0.04)] transition-all border border-[#DFE7F3] ${
-        isFullscreen ? 'fixed inset-0 z-50 rounded-none' : 'h-[500px] lg:h-[580px]'
+        isFullscreen ? 'fixed inset-0 z-50 rounded-none' : 'h-[540px] lg:h-[620px]'
       }`}
     >
       {/* ========================================================= */}
@@ -186,8 +212,24 @@ export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
           options={options}
           selectedComponentId={selectedComponentId}
           onSelectComponent={onSelectComponent}
+          liveTelemetry={liveTelemetry}
         />
       </div>
+
+      {/* ========================================================= */}
+      {/* LIVE SENSOR TELEMETRY OVERLAY                             */}
+      {/* ========================================================= */}
+      {onControl && onToggleMode && (
+        <LiveSensorOverlay
+          reading={sensorReading ?? null}
+          connectionStatus={connectionStatus}
+          lastReceivedAt={lastReceivedAt}
+          isSimulatorRunning={isSimulatorRunning}
+          currentMode={currentMode}
+          onControl={onControl}
+          onToggleMode={onToggleMode}
+        />
+      )}
 
       {/* Backdrop overlay dismiss for dropdown */}
       {showModeDropdown && (

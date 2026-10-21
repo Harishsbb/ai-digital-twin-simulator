@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Box, Layers, ChevronDown } from 'lucide-react'
 import { MotorViewportCard } from '../components/twin/MotorViewportCard'
 import { ComponentDetailsCard } from '../components/twin/ComponentDetailsCard'
@@ -6,11 +6,47 @@ import { ViewModeSelectorCard } from '../components/twin/ViewModeSelectorCard'
 import { StatusSelectorCard } from '../components/twin/StatusSelectorCard'
 import { ControlsHelpCard } from '../components/twin/ControlsHelpCard'
 import { getComponentById } from '../data/motorComponents'
-import type { TwinViewMode, TwinViewOptions, TwinVisualStatus } from '../types'
+import { useSensorStream } from '../context/useSensorStream'
+import { evaluateMachineStatusFromSensors } from '../utils/motorTelemetryMath'
+import type { LiveMotorTelemetry, TwinViewMode, TwinViewOptions, TwinVisualStatus } from '../types'
 
 export const DigitalTwinPage: React.FC = () => {
-  // Machine Status State (Normal / Warning / Critical)
-  const [status, setStatus] = useState<TwinVisualStatus>('Normal')
+  // Shared Live Telemetry Stream from single WebSocket connection
+  const {
+    reading,
+    connectionStatus,
+    lastReceivedAt,
+    isSimulatorRunning,
+    currentMode,
+    controlSimulator,
+    toggleMode,
+  } = useSensorStream()
+
+  // Machine Status State (defaults to live evaluated telemetry status, can be manually tested)
+  const [manualStatus, setManualStatus] = useState<TwinVisualStatus | null>(null)
+
+  const liveEvaluatedStatus = useMemo(() => {
+    return evaluateMachineStatusFromSensors(
+      reading?.temperature,
+      reading?.vibration,
+      reading?.rpm
+    )
+  }, [reading?.temperature, reading?.vibration, reading?.rpm])
+
+  const status: TwinVisualStatus = manualStatus ?? liveEvaluatedStatus
+
+  // Memoized live telemetry packet for 3D motor physics animation
+  const liveTelemetry: LiveMotorTelemetry | null = useMemo(() => {
+    if (!reading) return null
+    return {
+      rpm: reading.rpm,
+      vibration: reading.vibration,
+      temperature: reading.temperature,
+      isRunning: reading.is_running,
+      mode: reading.mode,
+      timestamp: reading.timestamp,
+    }
+  }, [reading])
 
   // Selected Component for detailed inspection (defaults to Stator Core matching reference)
   const [selectedComponentId, setSelectedComponentId] = useState<string>('stator-core')
@@ -134,7 +170,7 @@ export const DigitalTwinPage: React.FC = () => {
                 Warning: 'Critical',
                 Critical: 'Normal',
               }
-              setStatus(next[status])
+              setManualStatus(next[status])
             }}
             className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white border border-[#DFE7F3] shadow-xs hover:border-[#CBD5E1] transition-all cursor-pointer text-left"
           >
@@ -165,6 +201,14 @@ export const DigitalTwinPage: React.FC = () => {
             selectedComponentId={selectedComponentId}
             onSelectComponent={(id) => setSelectedComponentId(id)}
             onViewModeChange={handleSelectViewMode}
+            liveTelemetry={liveTelemetry}
+            sensorReading={reading}
+            connectionStatus={connectionStatus}
+            lastReceivedAt={lastReceivedAt}
+            isSimulatorRunning={isSimulatorRunning}
+            currentMode={currentMode}
+            onControl={controlSimulator}
+            onToggleMode={toggleMode}
           />
         </div>
 
@@ -191,7 +235,7 @@ export const DigitalTwinPage: React.FC = () => {
         {/* Card 2: Machine Status (Test) */}
         <StatusSelectorCard
           status={status}
-          onChangeStatus={(s) => setStatus(s)}
+          onChangeStatus={(s) => setManualStatus(s)}
         />
 
         {/* Card 3: Interaction Guide */}

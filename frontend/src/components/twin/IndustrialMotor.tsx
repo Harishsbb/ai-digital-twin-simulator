@@ -1,15 +1,22 @@
 import React, { useMemo, useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import type { TwinViewOptions, TwinVisualStatus } from '../../types'
+import type { LiveMotorTelemetry, TwinViewOptions, TwinVisualStatus } from '../../types'
 import { getComponentById } from '../../data/motorComponents'
 import { ComponentLeaderLabel } from './ComponentLeaderLabel'
+import {
+  calculateAngularVelocity,
+  calculateVibrationAmplitude,
+  calculateVibrationDisplacement,
+  getThermalEmissiveProperties,
+} from '../../utils/motorTelemetryMath'
 
 interface IndustrialMotorProps {
   status: TwinVisualStatus
   options: TwinViewOptions
   selectedComponentId: string | null
   onSelectComponent?: (componentId: string) => void
+  liveTelemetry?: LiveMotorTelemetry | null
 }
 
 export const IndustrialMotor: React.FC<IndustrialMotorProps> = ({
@@ -17,10 +24,17 @@ export const IndustrialMotor: React.FC<IndustrialMotorProps> = ({
   options,
   selectedComponentId,
   onSelectComponent,
+  liveTelemetry,
 }) => {
   const motorGroupRef = useRef<THREE.Group>(null)
   const shaftRotationRef = useRef<THREE.Group>(null)
   const fanRotationRef = useRef<THREE.Group>(null)
+  const rotorRotationRef = useRef<THREE.Group>(null)
+
+  // Smoothed physics refs for continuous, frame-rate independent visual realism
+  const currentOmegaRef = useRef<number>(0)
+  const currentVibAmpRef = useRef<number>(0)
+
 
   // Individual component group refs for smooth 60fps animated separation
   const housingGroupRef = useRef<THREE.Group>(null)
@@ -119,30 +133,54 @@ export const IndustrialMotor: React.FC<IndustrialMotorProps> = ({
     return Array.from({ length: 6 }, (_, i) => (i / 6) * Math.PI * 2)
   }, [])
 
-  // Continuous animation loop (shaft spin, fan rotation, vibrations, exploded view lerp)
+  // Heat sensitive motor components that display temperature thermal gradient
+  const heatSensitiveComponents = useMemo(
+    () => new Set(['stator-core', 'motor-housing', 'cooling-fins', 'front-end-shield', 'de-bearing', 'nde-bearing', 'rotor']),
+    []
+  )
+
+  // Continuous animation loop (live RPM spin, fan rotation, live vibrations, thermal factor lerp, exploded view lerp)
   useFrame((state, delta) => {
     const time = state.clock.getElapsedTime()
     const targetProgress = (options.viewMode === 'exploded' || options.explodedView) ? 1 : 0
     progressRef.current = THREE.MathUtils.damp(progressRef.current, targetProgress, 6, delta)
     const p = progressRef.current
 
-    // Shaft & Cooling Fan Rotation
+    // 1. Live RPM-Driven Shaft, Fan & Rotor Rotation (Frame-Rate Independent with Smooth Damping)
+    const targetRpm = liveTelemetry
+      ? (liveTelemetry.isRunning ? liveTelemetry.rpm : 0)
+      : (options.autoRotate ? 500 * options.rotationSpeed : 120)
+    const targetOmega = calculateAngularVelocity(
+      targetRpm,
+      liveTelemetry ? liveTelemetry.isRunning : true
+    )
+    currentOmegaRef.current = THREE.MathUtils.damp(currentOmegaRef.current, targetOmega, 3.5, delta)
+
     if (shaftRotationRef.current) {
-      const speed = options.autoRotate ? 5.0 * options.rotationSpeed : 1.2
-      shaftRotationRef.current.rotation.z += speed * delta
+      shaftRotationRef.current.rotation.z += currentOmegaRef.current * delta
     }
     if (fanRotationRef.current && shaftRotationRef.current) {
       fanRotationRef.current.rotation.z = shaftRotationRef.current.rotation.z
     }
+    if (rotorRotationRef.current && shaftRotationRef.current) {
+      rotorRotationRef.current.rotation.z = shaftRotationRef.current.rotation.z
+    }
 
-    // Status Vibrations
+    // 2. Live Vibration Mechanical Jitter (Subtle, Bounded Multi-Harmonic Oscillation)
+    const targetVib = liveTelemetry
+      ? (liveTelemetry.isRunning ? liveTelemetry.vibration : 0)
+      : (status === 'Critical' ? 8.2 : status === 'Warning' ? 4.0 : 0)
+    const targetAmp = calculateVibrationAmplitude(
+      targetVib,
+      liveTelemetry ? liveTelemetry.isRunning : true
+    )
+    currentVibAmpRef.current = THREE.MathUtils.damp(currentVibAmpRef.current, targetAmp, 4.5, delta)
+
     if (motorGroupRef.current) {
-      if (status === 'Critical') {
-        motorGroupRef.current.position.x = Math.sin(time * 65) * 0.012
-        motorGroupRef.current.position.y = Math.cos(time * 55) * 0.01
-      } else if (status === 'Warning') {
-        motorGroupRef.current.position.x = Math.sin(time * 35) * 0.004
-        motorGroupRef.current.position.y = Math.cos(time * 30) * 0.003
+      if (currentVibAmpRef.current > 0.0001) {
+        const displacement = calculateVibrationDisplacement(currentVibAmpRef.current, time)
+        motorGroupRef.current.position.x = displacement.x
+        motorGroupRef.current.position.y = displacement.y
       } else {
         motorGroupRef.current.position.x = 0
         motorGroupRef.current.position.y = 0
@@ -202,13 +240,42 @@ export const IndustrialMotor: React.FC<IndustrialMotorProps> = ({
   const wireframe = options.wireframe
   const isLabelsVisible = options.showLabels || options.viewMode === 'exploded'
 
-  // Helper function to calculate highlight props for any component
+  // Derived thermal properties purely from props (no mutable refs accessed during render)
+  const currentTemp = liveTelemetry?.temperature ?? 68.0
+  const thermalProps = useMemo(() => getThermalEmissiveProperties(currentTemp), [currentTemp])
+
+  // Helper function to calculate highlight props and dynamic thermal glow
   const getHighlightProps = (id: string) => {
     const isSelected = selectedComponentId === id
     const isHovered = hoveredId === id
+
+    // User selection and hover ALWAYS have absolute priority
+    if (isSelected) {
+      return {
+        emissive: '#0284c7',
+        emissiveIntensity: 0.75,
+      }
+    }
+    if (isHovered) {
+      return {
+        emissive: '#0369a1',
+        emissiveIntensity: 0.35,
+      }
+    }
+
+    // Thermal Heatmap Emissive Glow: applies when temperature is elevated
+    if (heatSensitiveComponents.has(id) && thermalProps.isOverheating) {
+      const isCoreSource = id === 'stator-core' || id === 'de-bearing' || id === 'nde-bearing'
+      const multiplier = isCoreSource ? 1.0 : 0.75
+      return {
+        emissive: thermalProps.emissiveColor,
+        emissiveIntensity: Math.min(0.95, thermalProps.emissiveIntensity * multiplier),
+      }
+    }
+
     return {
-      emissive: isSelected ? '#0284c7' : isHovered ? '#0369a1' : '#000000',
-      emissiveIntensity: isSelected ? 0.75 : isHovered ? 0.35 : 0,
+      emissive: '#000000',
+      emissiveIntensity: 0,
     }
   }
 
@@ -502,34 +569,36 @@ export const IndustrialMotor: React.FC<IndustrialMotorProps> = ({
         }}
         onPointerOut={() => setHoveredId(null)}
       >
-        <mesh rotation={[Math.PI / 2, 0, 0]} castShadow>
-          <cylinderGeometry args={[0.66, 0.66, 1.72, 36]} />
-          <meshStandardMaterial
-            color="#475569"
-            metalness={0.78}
-            roughness={0.32}
-            {...getHighlightProps('rotor')}
-          />
-        </mesh>
-        {[-0.87, 0.87].map((z, idx) => (
-          <mesh key={idx} position={[0, 0, z]} rotation={[Math.PI / 2, 0, 0]}>
-            <cylinderGeometry args={[0.67, 0.67, 0.06, 36]} />
-            <meshStandardMaterial color={colors.copper} metalness={0.9} roughness={0.2} />
+        <group ref={rotorRotationRef}>
+          <mesh rotation={[Math.PI / 2, 0, 0]} castShadow>
+            <cylinderGeometry args={[0.66, 0.66, 1.72, 36]} />
+            <meshStandardMaterial
+              color="#475569"
+              metalness={0.78}
+              roughness={0.32}
+              {...getHighlightProps('rotor')}
+            />
           </mesh>
-        ))}
-        {Array.from({ length: 18 }).map((_, i) => {
-          const a = (i / 18) * Math.PI * 2
-          return (
-            <mesh
-              key={i}
-              position={[Math.cos(a) * 0.665, Math.sin(a) * 0.665, 0]}
-              rotation={[0, 0, a + 0.12]}
-            >
-              <boxGeometry args={[0.022, 0.038, 1.72]} />
-              <meshStandardMaterial color={colors.copper} metalness={0.88} roughness={0.25} />
+          {[-0.87, 0.87].map((z, idx) => (
+            <mesh key={idx} position={[0, 0, z]} rotation={[Math.PI / 2, 0, 0]}>
+              <cylinderGeometry args={[0.67, 0.67, 0.06, 36]} />
+              <meshStandardMaterial color={colors.copper} metalness={0.9} roughness={0.2} />
             </mesh>
-          )
-        })}
+          ))}
+          {Array.from({ length: 18 }).map((_, i) => {
+            const a = (i / 18) * Math.PI * 2
+            return (
+              <mesh
+                key={i}
+                position={[Math.cos(a) * 0.665, Math.sin(a) * 0.665, 0]}
+                rotation={[0, 0, a + 0.12]}
+              >
+                <boxGeometry args={[0.022, 0.038, 1.72]} />
+                <meshStandardMaterial color={colors.copper} metalness={0.88} roughness={0.25} />
+              </mesh>
+            )
+          })}
+        </group>
 
         <ComponentLeaderLabel
           component={getComponentById('rotor')}

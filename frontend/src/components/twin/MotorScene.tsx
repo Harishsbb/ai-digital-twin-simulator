@@ -4,7 +4,7 @@ import { OrbitControls, PerspectiveCamera, ContactShadows, Environment } from '@
 import * as THREE from 'three'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { IndustrialMotor } from './IndustrialMotor'
-import type { TwinViewOptions, TwinVisualStatus } from '../../types'
+import type { LiveMotorTelemetry, TwinViewOptions, TwinVisualStatus } from '../../types'
 
 export interface MotorSceneHandle {
   resetCamera: () => void
@@ -15,6 +15,7 @@ interface MotorSceneProps {
   options: TwinViewOptions
   selectedComponentId: string | null
   onSelectComponent?: (componentId: string) => void
+  liveTelemetry?: LiveMotorTelemetry | null
 }
 
 // Camera positioned at the user-specified 3/4 angle and size
@@ -22,7 +23,7 @@ const DEFAULT_CAMERA_POS: [number, number, number] = [-3.45, 1.95, 3.45]
 const DEFAULT_TARGET: [number, number, number] = [0.08, 0.08, 0.05]
 
 export const MotorScene = forwardRef<MotorSceneHandle, MotorSceneProps>(
-  ({ status, options, selectedComponentId, onSelectComponent }, ref) => {
+  ({ status, options, selectedComponentId, onSelectComponent, liveTelemetry }, ref) => {
     const controlsRef = useRef<OrbitControlsImpl>(null)
 
     useImperativeHandle(ref, () => ({
@@ -138,6 +139,7 @@ export const MotorScene = forwardRef<MotorSceneHandle, MotorSceneProps>(
               options={options}
               selectedComponentId={selectedComponentId}
               onSelectComponent={onSelectComponent}
+              liveTelemetry={liveTelemetry}
             />
           </Suspense>
         </Canvas>

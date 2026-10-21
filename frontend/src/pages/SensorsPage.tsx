@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import {
   Activity,
   AlertOctagon,
@@ -15,142 +15,33 @@ import {
 } from 'lucide-react'
 import { Card } from '../components/Card'
 import { StatusBadge } from '../components/StatusBadge'
-import {
-  controlSimulator,
-  fetchLatestSensorReading,
-  fetchSensorHistory,
-  fetchSimulatorState,
-  getSensorWebSocketUrl,
-} from '../services/api'
-import type {
-  SensorReading,
-  SimulatorStateResponse,
-} from '../types'
+import { useSensorStream } from '../context/useSensorStream'
+import type { SimulatorAction } from '../types'
 
 export const SensorsPage: React.FC = () => {
-  const [reading, setReading] = useState<SensorReading | null>(null)
-  const [history, setHistory] = useState<SensorReading[]>([])
-  const [simState, setSimState] = useState<SimulatorStateResponse | null>(null)
-  const [wsConnected, setWsConnected] = useState<boolean>(false)
+  const {
+    reading,
+    history,
+    simState,
+    connectionStatus,
+    error: contextError,
+    controlSimulator,
+  } = useSensorStream()
+
   const [loadingAction, setLoadingAction] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [actionError, setActionError] = useState<string | null>(null)
 
-  const wsRef = useRef<WebSocket | null>(null)
-  const reconnectTimeoutRef = useRef<number | null>(null)
+  const error = actionError || contextError
+  const wsConnected = connectionStatus === 'Connected'
 
-  // Initial load via REST API
-  useEffect(() => {
-    let active = true
-
-    const loadInitialData = async () => {
-      try {
-        const [latest, state, hist] = await Promise.all([
-          fetchLatestSensorReading(),
-          fetchSimulatorState(),
-          fetchSensorHistory(40),
-        ])
-        if (active) {
-          setReading(latest)
-          setSimState(state)
-          setHistory(hist)
-          setError(null)
-        }
-      } catch (err) {
-        if (active) {
-          setError(err instanceof Error ? err.message : 'Failed to connect to backend sensor API')
-        }
-      }
-    }
-
-    loadInitialData()
-
-    // Establish WebSocket Connection for continuous live streaming
-    const connectWebSocket = () => {
-      try {
-        const wsUrl = getSensorWebSocketUrl()
-        const ws = new WebSocket(wsUrl)
-        wsRef.current = ws
-
-        ws.onopen = () => {
-          if (active) {
-            setWsConnected(true)
-            setError(null)
-          }
-        }
-
-        ws.onmessage = (event) => {
-          if (!active) return
-          try {
-            const data = JSON.parse(event.data)
-            if (data.type === 'control_ack') {
-              setSimState(data.state)
-              if (data.state.latest_reading) {
-                setReading(data.state.latest_reading)
-              }
-            } else if (data.temperature !== undefined) {
-              const newReading: SensorReading = data
-              setReading(newReading)
-              setHistory((prev) => {
-                const next = [...prev, newReading]
-                return next.slice(-40) // Keep last 40 data points
-              })
-            }
-          } catch {
-            // Ignore non-json packets
-          }
-        }
-
-        ws.onerror = () => {
-          if (active) {
-            setWsConnected(false)
-          }
-        }
-
-        ws.onclose = () => {
-          if (active) {
-            setWsConnected(false)
-            // Attempt automatic reconnect after 2.5s
-            reconnectTimeoutRef.current = window.setTimeout(connectWebSocket, 2500)
-          }
-        }
-      } catch {
-        if (active) {
-          setWsConnected(false)
-        }
-      }
-    }
-
-    connectWebSocket()
-
-    return () => {
-      active = false
-      if (reconnectTimeoutRef.current) {
-        clearTimeout(reconnectTimeoutRef.current)
-      }
-      if (wsRef.current) {
-        wsRef.current.close()
-      }
-    }
-  }, [])
-
-  // Simulator Control Handlers
+  // Simulator Control Handlers using shared context
   const handleControl = async (action: 'start' | 'pause' | 'reset' | 'toggle_mode') => {
     setLoadingAction(action)
     try {
-      // If WebSocket is open, we can send command over WS for immediate response
-      if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-        wsRef.current.send(JSON.stringify({ action }))
-      }
-      // Always sync state via REST endpoint as reliable source of truth
-      const updatedState = await controlSimulator(action)
-      setSimState(updatedState)
-      setReading(updatedState.latest_reading)
-      if (action === 'reset') {
-        setHistory([updatedState.latest_reading])
-      }
-      setError(null)
+      await controlSimulator(action as SimulatorAction)
+      setActionError(null)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Control action failed')
+      setActionError(err instanceof Error ? err.message : 'Control action failed')
     } finally {
       setLoadingAction(null)
     }

@@ -48,11 +48,12 @@ async def get_simulator_state(
     description="Retrieve a chronological window of recent telemetry readings for charts and sparklines.",
 )
 async def get_sensor_history(
-    limit: int = Query(default=50, ge=1, le=200, description="Number of recent data points to return"),
+    limit: int = Query(default=50, ge=1, le=500, description="Number of recent data points to return"),
+    seconds: Optional[int] = Query(default=None, ge=1, le=3600, description="Optional time window in seconds"),
     simulator: SensorDataSimulator = Depends(get_sensor_simulator),
 ) -> List[SensorReading]:
     """Retrieve historical telemetry data points."""
-    return simulator.get_history(limit=limit)
+    return simulator.get_history(limit=limit, seconds=seconds)
 
 
 @router.post(

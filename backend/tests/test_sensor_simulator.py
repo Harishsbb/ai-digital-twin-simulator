@@ -178,6 +178,23 @@ def test_api_get_sensor_history(client: TestClient):
     assert len(history) >= 1
     assert "temperature" in history[0]
 
+    # Test seconds parameter
+    res_sec = client.get("/api/v1/sensors/history?seconds=60&limit=50")
+    assert res_sec.status_code == 200
+    assert isinstance(res_sec.json(), list)
+
+    # Test boundary limits
+    res_large = client.get("/api/v1/sensors/history?limit=500")
+    assert res_large.status_code == 200
+
+    # Test invalid limit (0 or negative)
+    res_invalid_limit = client.get("/api/v1/sensors/history?limit=0")
+    assert res_invalid_limit.status_code == 422
+
+    # Test invalid seconds (0 or negative)
+    res_invalid_sec = client.get("/api/v1/sensors/history?seconds=0")
+    assert res_invalid_sec.status_code == 422
+
 
 def test_api_control_simulator_actions(client: TestClient):
     """Test POST /api/v1/sensors/control with pause, start, and reset."""

@@ -45,8 +45,8 @@ class SensorDataSimulator:
         # Fault progression tracker (0.0 to 1.0)
         self._fault_intensity = 0.0
 
-        # Circular buffer for historical telemetry
-        self._history: Deque[SensorReading] = deque(maxlen=200)
+        # Circular buffer for historical telemetry (500 items = ~4.1 minutes at 0.5s intervals)
+        self._history: Deque[SensorReading] = deque(maxlen=500)
 
         # Active WebSocket subscribers
         self._active_connections: Set[WebSocket] = set()
@@ -140,10 +140,18 @@ class SensorDataSimulator:
             return self._history[-1]
         return self._create_reading()
 
-    def get_history(self, limit: int = 50) -> List[SensorReading]:
-        """Return a chronological slice of historical telemetry readings."""
-        limit = max(1, min(limit, len(self._history)))
-        return list(self._history)[-limit:]
+    def get_history(self, limit: int = 50, seconds: Optional[int] = None) -> List[SensorReading]:
+        """Return a chronological slice of historical telemetry readings, optionally filtered by recent seconds."""
+        readings = list(self._history)
+        if seconds is not None and seconds > 0:
+            now = datetime.now(timezone.utc)
+            readings = [r for r in readings if (now - r.timestamp).total_seconds() <= seconds]
+
+        if not readings:
+            return []
+
+        effective_limit = max(1, min(limit, len(readings)))
+        return readings[-effective_limit:]
 
     def get_state(self) -> SimulatorStateResponse:
         """Inspect the current operational state of the simulator."""

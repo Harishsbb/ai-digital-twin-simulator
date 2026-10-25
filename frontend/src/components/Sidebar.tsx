@@ -8,6 +8,7 @@ import {
   Brain,
   Home,
   Settings,
+  Sparkles,
   X,
 } from 'lucide-react'
 import { useAlerts } from '../context/useAlerts'
@@ -47,6 +48,11 @@ const navItems = [
     name: 'Analytics',
     path: '/analytics',
     icon: BarChart2,
+  },
+  {
+    name: 'What-If Simulation',
+    path: '/what-if',
+    icon: Sparkles,
   },
   {
     name: 'Settings',

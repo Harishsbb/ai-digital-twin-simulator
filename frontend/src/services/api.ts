@@ -72,8 +72,13 @@ export async function fetchSimulatorState(): Promise<SimulatorStateResponse> {
   return response.json()
 }
 
-export async function fetchSensorHistory(limit = 50): Promise<SensorReading[]> {
-  const response = await fetch(`${API_BASE_URL}/api/v1/sensors/history?limit=${limit}`, {
+export async function fetchSensorHistory(limit = 100, seconds?: number): Promise<SensorReading[]> {
+  const params = new URLSearchParams()
+  params.append('limit', String(limit))
+  if (seconds !== undefined && seconds > 0) {
+    params.append('seconds', String(seconds))
+  }
+  const response = await fetch(`${API_BASE_URL}/api/v1/sensors/history?${params.toString()}`, {
     headers: {
       'Accept': 'application/json',
     },

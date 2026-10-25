@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState, useRef } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Bell,
   BookOpen,
   ChevronDown,
   Menu,
   Search,
+  LogOut,
+  Settings as SettingsIcon,
 } from 'lucide-react'
 import { fetchBackendHealth } from '../services/api'
 import type { BackendHealthResponse } from '../types'
 import { useAlerts } from '../context/useAlerts'
+import { useAuth } from '../context/useAuth'
 
 interface HeaderProps {
   onToggleSidebar?: () => void
@@ -18,7 +21,33 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   const [health, setHealth] = useState<BackendHealthResponse | null>(null)
   const [connected, setConnected] = useState<boolean | null>(null)
+  const [profileOpen, setProfileOpen] = useState(false)
+  const profileRef = useRef<HTMLDivElement>(null)
+
   const { counts } = useAlerts()
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
+
+  const displayName = user?.name || 'Operator'
+  const displayEmail = user?.email || 'operator@digitaltwin.ai'
+  const initial = displayName.trim().charAt(0).toUpperCase() || 'O'
+
+  // Close profile dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setProfileOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const handleLogout = async () => {
+    setProfileOpen(false)
+    await logout()
+    navigate('/login')
+  }
 
   const checkHealth = React.useCallback(async () => {
     try {
@@ -130,18 +159,95 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
           )}
         </Link>
 
-        {/* User Profile Card */}
-        <div className="flex items-center gap-2.5 pl-2 border-l border-[#DFE7F3]">
-          <div className="w-9 h-9 rounded-full bg-[#6366F1] flex items-center justify-center font-bold text-white text-xs shadow-xs">
-            H
-          </div>
-          <div className="hidden sm:block text-left leading-tight">
-            <div className="text-xs font-bold text-[#10213D]">Harish</div>
-            <div className="text-[11px] text-[#475569] font-medium">Developer</div>
-          </div>
-          <ChevronDown className="w-4 h-4 text-[#94A3B8] hidden sm:block" />
+        {/* User Profile Card & Interactive Dropdown */}
+        <div ref={profileRef} className="relative pl-2 border-l border-[#DFE7F3]">
+          <button
+            type="button"
+            id="user-profile-menu-button"
+            onClick={() => setProfileOpen((prev) => !prev)}
+            aria-expanded={profileOpen}
+            aria-haspopup="true"
+            className="flex items-center gap-2.5 p-1 rounded-xl hover:bg-white/80 transition-colors cursor-pointer focus:outline-none"
+          >
+            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#0D9488] to-[#14B8A6] flex items-center justify-center font-bold text-white text-xs shadow-xs">
+              {initial}
+            </div>
+            <div className="hidden sm:block text-left leading-tight">
+              <div className="text-xs font-bold text-[#10213D] truncate max-w-[110px]">
+                {displayName}
+              </div>
+              <div className="text-[11px] text-[#475569] font-medium">Operator</div>
+            </div>
+            <ChevronDown
+              className={`w-4 h-4 text-[#94A3B8] hidden sm:block transition-transform duration-200 ${
+                profileOpen ? 'rotate-180 text-[#0D9488]' : ''
+              }`}
+            />
+          </button>
+
+          {/* Profile Dropdown Menu */}
+          {profileOpen && (
+            <div
+              role="menu"
+              className="absolute right-0 mt-2 w-64 rounded-2xl bg-white shadow-xl shadow-teal-950/10 border border-[#E2E8F0] py-2 z-50 divide-y divide-[#F1F5F9] animate-in fade-in slide-in-from-top-2 duration-150"
+            >
+              {/* User Meta */}
+              <div className="px-4 py-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#0D9488] to-[#14B8A6] flex items-center justify-center font-bold text-white text-sm shadow-xs shrink-0">
+                    {initial}
+                  </div>
+                  <div className="overflow-hidden">
+                    <p className="text-xs font-bold text-[#10213D] truncate">{displayName}</p>
+                    <p className="text-[11px] text-[#64748B] truncate">{displayEmail}</p>
+                    <span className="inline-block mt-1 px-1.5 py-0.5 rounded-md bg-[#F0FDFA] border border-[#99F6E4] text-[10px] font-semibold text-[#0F766E]">
+                      Digital Twin Operator
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Navigation Options */}
+              <div className="py-1">
+                <Link
+                  to="/settings"
+                  onClick={() => setProfileOpen(false)}
+                  className="flex items-center gap-2.5 px-4 py-2 text-xs text-[#475569] hover:text-[#10213D] hover:bg-[#F8FAFC] transition-colors"
+                  role="menuitem"
+                >
+                  <SettingsIcon className="w-4 h-4 text-[#64748B]" />
+                  <span>Platform Settings</span>
+                </Link>
+                <Link
+                  to="/user-manual"
+                  onClick={() => setProfileOpen(false)}
+                  className="flex items-center gap-2.5 px-4 py-2 text-xs text-[#475569] hover:text-[#10213D] hover:bg-[#F8FAFC] transition-colors"
+                  role="menuitem"
+                >
+                  <BookOpen className="w-4 h-4 text-[#64748B]" />
+                  <span>User Manual & Guide</span>
+                </Link>
+              </div>
+
+              {/* Sign Out Option */}
+              <div className="py-1">
+                <button
+                  type="button"
+                  id="header-logout-button"
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-2.5 px-4 py-2 text-xs text-[#EF4444] hover:bg-[#FEF2F2] hover:text-[#DC2626] transition-colors font-medium cursor-pointer text-left"
+                  role="menuitem"
+                >
+                  <LogOut className="w-4 h-4 text-[#EF4444]" />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </header>
   )
 }
+
+export default Header

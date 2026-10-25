@@ -1,7 +1,8 @@
 import asyncio
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
+import uuid
 from sqlalchemy import desc
 from sqlalchemy.orm import Session
 
@@ -9,6 +10,7 @@ from app.db.models import (
     AIPredictionModel,
     AlertRecordModel,
     SensorReadingModel,
+    UserModel,
     WhatIfExperimentModel,
 )
 from app.db.session import get_session_factory
@@ -268,3 +270,70 @@ class AsyncPersistenceManager:
             loop.run_in_executor(None, cls._sync_save_prediction, prediction, source)
         except RuntimeError:
             pass
+
+
+# In-memory user store for tests or when database is offline/unconfigured
+_IN_MEMORY_USERS: Dict[str, UserModel] = {}
+
+
+class UserRepository:
+    """Repository handling database operations for user authentication and accounts."""
+
+    @staticmethod
+    def get_by_email(db: Optional[Session], email: str) -> Optional[UserModel]:
+        normalized_email = email.strip().lower()
+        if db is not None:
+            return db.query(UserModel).filter(UserModel.email == normalized_email).first()
+        # Fallback to in-memory store
+        for user in _IN_MEMORY_USERS.values():
+            if user.email == normalized_email:
+                return user
+        return None
+
+    @staticmethod
+    def get_by_id(db: Optional[Session], user_id: str) -> Optional[UserModel]:
+        if db is not None:
+            return db.query(UserModel).filter(UserModel.id == user_id).first()
+        return _IN_MEMORY_USERS.get(user_id)
+
+    @staticmethod
+    def create_user(
+        db: Optional[Session],
+        email: str,
+        full_name: str,
+        hashed_password: str,
+    ) -> UserModel:
+        user_id = f"user_{uuid.uuid4().hex[:16]}"
+        normalized_email = email.strip().lower()
+        user = UserModel(
+            id=user_id,
+            email=normalized_email,
+            full_name=full_name.strip(),
+            hashed_password=hashed_password,
+            is_active=True,
+            created_at=datetime.now(timezone.utc),
+        )
+        if db is not None:
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+        # Always mirror in memory for fast lookup or test consistency
+        _IN_MEMORY_USERS[user.id] = user
+        return user
+
+    @staticmethod
+    def update_last_login(db: Optional[Session], user_id: str) -> None:
+        now = datetime.now(timezone.utc)
+        if db is not None:
+            user = db.query(UserModel).filter(UserModel.id == user_id).first()
+            if user:
+                user.last_login_at = now
+                db.commit()
+        if user_id in _IN_MEMORY_USERS:
+            _IN_MEMORY_USERS[user_id].last_login_at = now
+
+    @staticmethod
+    def clear_in_memory_users() -> None:
+        """Clear memory cache (for test isolation)."""
+        _IN_MEMORY_USERS.clear()
+

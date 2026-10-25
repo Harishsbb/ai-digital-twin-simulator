@@ -174,3 +174,32 @@ class WhatIfExperimentModel(Base):
             "baseline_snapshot": self.baseline_snapshot,
             "created_at": self.created_at.isoformat() if self.created_at else None,
         }
+
+
+class UserModel(Base):
+    """User account credentials and profile metadata for simulator authentication."""
+
+    __tablename__ = "users"
+
+    id = Column(String(64), primary_key=True)  # UUID string e.g. user_...
+    email = Column(String(255), unique=True, nullable=False, index=True)
+    full_name = Column(String(255), nullable=False)
+    hashed_password = Column(String(255), nullable=False)
+    is_active = Column(Boolean, nullable=False, default=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    last_login_at = Column(DateTime(timezone=True), nullable=True)
+
+    def to_safe_dict(self) -> dict:
+        """Convert model attributes to dictionary, strictly excluding password hash."""
+        return {
+            "id": self.id,
+            "email": self.email,
+            "name": self.full_name,
+            "is_active": self.is_active,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "last_login_at": self.last_login_at.isoformat() if self.last_login_at else None,
+        }
+
+    def to_dict(self) -> dict:
+        """Standard representation returning safe attributes."""
+        return self.to_safe_dict()

@@ -18,6 +18,11 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
     cors_allow_origin_regex: Optional[str] = r"^https://.*\.vercel\.app$"
 
+    # Authentication & JWT Configuration
+    jwt_secret: str = "ai-digital-twin-simulator-auth-jwt-secret-key-production-32bytes-min"
+    jwt_algorithm: str = "HS256"
+    jwt_expire_minutes: int = 60 * 24 * 7  # 7 days default session
+
     # Database Configuration (Supabase PostgreSQL Session Pooler)
     database_url: Optional[str] = None
     db_host: str = "aws-0-ap-northeast-2.pooler.supabase.com"

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   Bell,
   ChevronDown,
@@ -7,6 +8,7 @@ import {
 } from 'lucide-react'
 import { fetchBackendHealth } from '../services/api'
 import type { BackendHealthResponse } from '../types'
+import { useAlerts } from '../context/useAlerts'
 
 interface HeaderProps {
   onToggleSidebar?: () => void
@@ -15,6 +17,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   const [health, setHealth] = useState<BackendHealthResponse | null>(null)
   const [connected, setConnected] = useState<boolean | null>(null)
+  const { counts } = useAlerts()
 
   const checkHealth = React.useCallback(async () => {
     try {
@@ -97,14 +100,23 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
           <span>System Online</span>
         </button>
 
-        {/* Notifications Icon with Badge Dot */}
-        <button
-          className="relative p-2 rounded-xl bg-white border border-[#DFE7F3] text-[#64748B] hover:text-[#10213D] hover:border-[#CBD5E1] transition-all shadow-xs cursor-pointer"
-          title="Notifications"
+        {/* Notifications Icon with Dynamic Unacknowledged Badge */}
+        <Link
+          to="/alerts"
+          className="relative p-2 rounded-xl bg-white border border-[#DFE7F3] text-[#64748B] hover:text-[#10213D] hover:border-[#CBD5E1] transition-all shadow-xs cursor-pointer inline-flex items-center justify-center"
+          title={
+            counts.unacknowledged > 0
+              ? `${counts.unacknowledged} unacknowledged alert${counts.unacknowledged > 1 ? 's' : ''}`
+              : 'Alert Center (0 unacknowledged)'
+          }
         >
           <Bell className="w-4 h-4" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#EF4444]" />
-        </button>
+          {counts.unacknowledged > 0 && (
+            <span className="absolute -top-1 -right-1 px-1.5 py-0.2 min-w-4.5 h-4.5 rounded-full bg-[#EF4444] text-white text-[10px] font-bold flex items-center justify-center shadow-xs animate-pulse">
+              {counts.unacknowledged > 99 ? '99+' : counts.unacknowledged}
+            </span>
+          )}
+        </Link>
 
         {/* User Profile Card */}
         <div className="flex items-center gap-2.5 pl-2 border-l border-[#DFE7F3]">

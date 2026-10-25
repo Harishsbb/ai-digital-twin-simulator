@@ -10,6 +10,7 @@ import { AIStatusBadge } from '../components/ai'
 import { getComponentById } from '../data/motorComponents'
 import { useSensorStream } from '../context/useSensorStream'
 import { useAIPrediction } from '../context/useAIPrediction'
+import { useAlerts } from '../context/useAlerts'
 import { evaluateMachineStatusFromSensors } from '../utils/motorTelemetryMath'
 import type { LiveMotorTelemetry, TwinViewMode, TwinViewOptions, TwinVisualStatus } from '../types'
 
@@ -32,6 +33,12 @@ export const DigitalTwinPage: React.FC = () => {
     isModelReady,
     latestPrediction,
   } = useAIPrediction()
+
+  // Step 9: Real-time Alert System State
+  const {
+    counts: alertCounts,
+    latestAlert,
+  } = useAlerts()
 
   // Machine Status State (defaults to live evaluated telemetry status, can be manually tested)
   const [manualStatus, setManualStatus] = useState<TwinVisualStatus | null>(null)
@@ -149,6 +156,39 @@ export const DigitalTwinPage: React.FC = () => {
             <AIStatusBadge showScore={true} />
           </Link>
 
+          {/* Step 9: Alert Status Pill */}
+          <Link
+            to="/alerts"
+            className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl border shadow-xs transition-all cursor-pointer text-left ${
+              alertCounts.critical > 0
+                ? 'bg-[#FEF2F2] border-[#FECACA] text-[#991B1B] hover:border-[#F87171]'
+                : alertCounts.active > 0
+                ? 'bg-[#FFFBEB] border-[#FDE68A] text-[#92400E] hover:border-[#FBBF24]'
+                : 'bg-white border-[#DFE7F3] text-[#475569] hover:border-[#1769FF]'
+            }`}
+            title="Real-Time AI Alert Center"
+          >
+            <div className="relative">
+              <AlertOctagon className={`w-4 h-4 ${
+                alertCounts.critical > 0 ? 'text-[#EF4444]' : alertCounts.active > 0 ? 'text-[#F59E0B]' : 'text-[#64748B]'
+              }`} />
+              {alertCounts.unacknowledged > 0 && (
+                <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#EF4444] animate-ping" />
+              )}
+            </div>
+            <div className="leading-tight">
+              <div className="text-[10px] uppercase font-bold tracking-wider text-[#64748B] flex items-center gap-1">
+                <span>Alerts</span>
+                {alertCounts.unacknowledged > 0 && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#EF4444]" />
+                )}
+              </div>
+              <div className="text-xs font-bold text-[#10213D]">
+                {alertCounts.active === 0 ? '0 Active' : `${alertCounts.active} Active (${alertCounts.critical} Crit)`}
+              </div>
+            </div>
+          </Link>
+
           {/* Exploded / Assembled View Toggle Button */}
           <button
             type="button"
@@ -208,8 +248,51 @@ export const DigitalTwinPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Subtle AI Anomaly Notification Ribbon (when anomaly is detected) */}
-      {isModelReady && isAnomaly && (
+      {/* Subtle AI Anomaly / Alert Notification Ribbon (when active anomaly alert exists) */}
+      {latestAlert && !latestAlert.isDismissed && latestAlert.severity !== 'info' && (
+        <div className={`p-3.5 px-4 rounded-2xl border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 text-xs animate-in fade-in duration-200 shadow-2xs ${
+          latestAlert.severity === 'critical'
+            ? 'bg-[#FEF2F2] border-[#FECACA] text-[#991B1B]'
+            : latestAlert.severity === 'high'
+            ? 'bg-[#FFF7ED] border-[#FED7AA] text-[#9A3412]'
+            : 'bg-[#FFFBEB] border-[#FDE68A] text-[#92400E]'
+        }`}>
+          <div className="flex items-center gap-2.5">
+            <AlertOctagon className={`w-4 h-4 shrink-0 ${
+              latestAlert.severity === 'critical' ? 'text-[#EF4444]' : latestAlert.severity === 'high' ? 'text-[#F97316]' : 'text-[#F59E0B]'
+            }`} />
+            <div>
+              <span className="font-bold uppercase tracking-wider text-[10px] px-1.5 py-0.5 rounded mr-1.5 bg-white/70 border border-current/20">
+                {latestAlert.severity}
+              </span>
+              <span className="font-bold">{latestAlert.title}:</span>{' '}
+              <span>{latestAlert.description}</span>
+              {latestAlert.anomalyScore !== null && (
+                <span className="ml-1.5 font-mono text-[11px] opacity-80">
+                  (Score: {latestAlert.anomalyScore >= 0 ? `+${latestAlert.anomalyScore.toFixed(4)}` : latestAlert.anomalyScore.toFixed(4)})
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto">
+            <Link
+              to="/alerts"
+              className="underline font-bold hover:opacity-80 text-xs"
+            >
+              Alert Center &rarr;
+            </Link>
+            <Link
+              to="/anomaly-detection"
+              className="opacity-80 hover:opacity-100 text-xs"
+            >
+              AI Insights &rarr;
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Fallback AI Anomaly Notification Ribbon (if anomaly active but alert dismissed) */}
+      {(!latestAlert || latestAlert.isDismissed) && isModelReady && isAnomaly && (
         <div className="p-3.5 px-4 rounded-2xl bg-[#FEF2F2] border border-[#FECACA] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 text-xs text-[#991B1B] animate-in fade-in duration-200 shadow-2xs">
           <div className="flex items-center gap-2.5">
             <AlertOctagon className="w-4 h-4 text-[#EF4444] shrink-0" />
@@ -221,12 +304,20 @@ export const DigitalTwinPage: React.FC = () => {
               — {latestPrediction?.diagnostic_context?.summary || 'Telemetry vector partitioned into low-density anomaly region.'}
             </div>
           </div>
-          <Link
-            to="/anomaly-detection"
-            className="underline font-bold text-[#DC2626] hover:text-[#7F1D1D] shrink-0 text-xs self-end sm:self-auto"
-          >
-            Inspect AI Insights &rarr;
-          </Link>
+          <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto">
+            <Link
+              to="/alerts"
+              className="underline font-bold text-[#DC2626] hover:text-[#7F1D1D] text-xs"
+            >
+              Alert Center &rarr;
+            </Link>
+            <Link
+              to="/anomaly-detection"
+              className="font-medium text-[#DC2626] hover:text-[#7F1D1D] text-xs"
+            >
+              Inspect AI Insights &rarr;
+            </Link>
+          </div>
         </div>
       )}
 

@@ -10,6 +10,7 @@ import {
   Settings,
   X,
 } from 'lucide-react'
+import { useAlerts } from '../context/useAlerts'
 
 interface SidebarProps {
   isOpen: boolean
@@ -55,6 +56,7 @@ const navItems = [
 ]
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+  const { counts } = useAlerts()
   return (
     <>
       {/* Mobile Backdrop */}
@@ -124,6 +126,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                       )}
                       <Icon className={`w-5 h-5 shrink-0 ${isActive ? 'text-[#1769FF]' : 'text-[#475569]'}`} />
                       <span>{item.name}</span>
+                      {item.path === '/alerts' && counts.unacknowledged > 0 && (
+                        <span className="ml-auto px-2 py-0.5 rounded-full text-[11px] font-bold bg-[#EF4444] text-white shadow-xs">
+                          {counts.unacknowledged > 99 ? '99+' : counts.unacknowledged}
+                        </span>
+                      )}
                     </>
                   )}
                 </NavLink>

@@ -45,7 +45,16 @@ async def predict_anomaly(
     service: AnomalyDetectionService = Depends(get_anomaly_service),
 ) -> AnomalyPredictionResponse:
     """Evaluate point-in-time sensor values using the trained Isolation Forest model."""
-    return service.predict(reading=reading, source="user_telemetry_submission")
+    result = service.predict(reading=reading, source="user_telemetry_submission")
+    # Only persist real operational telemetry, not hypothetical sandbox experiments
+    dev_id = reading.device_id or ""
+    if not (dev_id.startswith("HYPOTHETICAL") or dev_id.startswith("WHATIF")):
+        try:
+            from app.db.repositories import AsyncPersistenceManager
+            AsyncPersistenceManager.schedule_prediction_persistence(result, source="user_telemetry_submission")
+        except Exception as db_err:
+            logger.debug(f"Prediction persistence skipped: {db_err}")
+    return result
 
 
 @router.get(
@@ -65,7 +74,13 @@ async def predict_latest_simulator_reading(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Sensor simulator has not produced any telemetry packets yet.",
         )
-    return service.predict(reading=latest_reading, source="live_simulator_stream")
+    result = service.predict(reading=latest_reading, source="live_simulator_stream")
+    try:
+        from app.db.repositories import AsyncPersistenceManager
+        AsyncPersistenceManager.schedule_prediction_persistence(result, source="live_simulator_stream")
+    except Exception as db_err:
+        logger.debug(f"Live prediction persistence skipped: {db_err}")
+    return result
 
 
 @router.get(

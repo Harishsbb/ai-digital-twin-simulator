@@ -14,6 +14,7 @@ import {
   fetchAIStatus,
   fetchBackendHealth,
   fetchBackendInfo,
+  fetchDatabaseHealth,
   fetchLatestSensorReading,
   fetchSensorHistory,
   fetchSimulatorState,
@@ -356,4 +357,52 @@ describe('Frontend API Client Services', () => {
     assert.strictEqual(metrics.evaluation_summary.accuracy, 0.9888)
     assert.strictEqual(metrics.evaluation_summary.recall, 1.0)
   })
+
+  it('fetchDatabaseHealth retrieves Supabase connection and pooler status', async () => {
+    const mockDbHealth = {
+      status: 'connected',
+      connected: true,
+      database_type: 'Supabase PostgreSQL (Session Pooler)',
+      host: 'aws-0-ap-northeast-2.pooler.supabase.com',
+      port: 5432,
+      database: 'postgres',
+      masked_url: 'postgresql://postgres.test:****@aws-0.pooler.supabase.com:5432/postgres',
+      latency_ms: 12.5,
+      tables_registered: ['sensor_readings', 'ai_predictions', 'alert_records', 'whatif_experiments'],
+      timestamp: '2026-10-25T11:00:00Z',
+      error: null,
+    }
+
+    // @ts-expect-error Mocking fetch
+    globalThis.fetch = async (url: string) => {
+      assert.ok(url.includes('/api/v1/db/health'))
+      return {
+        ok: true,
+        status: 200,
+        json: async () => mockDbHealth,
+      }
+    }
+
+    const health = await fetchDatabaseHealth()
+    assert.strictEqual(health.status, 'connected')
+    assert.strictEqual(health.connected, true)
+    assert.strictEqual(health.tables_registered.length, 4)
+  })
+
+  it('fetchDatabaseHealth throws descriptive error when server returns non-200', async () => {
+    // @ts-expect-error Mocking fetch
+    globalThis.fetch = async () => ({
+      ok: false,
+      status: 503,
+      statusText: 'Service Unavailable',
+    })
+
+    await assert.rejects(
+      async () => {
+        await fetchDatabaseHealth()
+      },
+      /Database health check failed with status: 503 Service Unavailable/
+    )
+  })
 })
+

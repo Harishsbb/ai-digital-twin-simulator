@@ -235,3 +235,30 @@ def test_websocket_sensor_stream(client: TestClient):
         ack2 = websocket.receive_json()
         assert ack2.get("type") == "control_ack"
         assert ack2["state"]["is_running"] is True
+
+
+def test_websocket_invalid_control_error_handling(client: TestClient):
+    """Test that sending an invalid control action over WebSocket returns error message."""
+    with client.websocket_connect("/api/v1/sensors/ws") as websocket:
+        _ = websocket.receive_json()
+        websocket.send_json({"action": "invalid_unsupported_action"})
+        err_msg = websocket.receive_json()
+        assert err_msg.get("type") == "error"
+        assert "Invalid control payload" in err_msg.get("message", "")
+
+
+def test_websocket_disconnect_cleanup(client: TestClient):
+    """Verify disconnecting WebSocket client cleanly decrements active connections in simulator."""
+    sim = get_sensor_simulator()
+    initial_conn_count = len(sim._active_connections)
+    with client.websocket_connect("/api/v1/sensors/ws"):
+        assert len(sim._active_connections) == initial_conn_count + 1
+    # After exiting context manager, client is disconnected
+    assert len(sim._active_connections) == initial_conn_count
+
+
+def test_api_control_invalid_action_rejected(client: TestClient):
+    """Verify POST /api/v1/sensors/control with invalid action returns 422 Unprocessable Entity."""
+    res = client.post("/api/v1/sensors/control", json={"action": "explode_motor"})
+    assert res.status_code == 422
+

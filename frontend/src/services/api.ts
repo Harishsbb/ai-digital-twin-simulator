@@ -23,6 +23,33 @@ export async function fetchBackendHealth(): Promise<BackendHealthResponse> {
   return response.json()
 }
 
+export interface DatabaseHealthResponse {
+  status: string
+  connected: boolean
+  database_type: string
+  host: string
+  port: number
+  database: string
+  masked_url: string
+  latency_ms: number | null
+  tables_registered: string[]
+  timestamp: string
+  error: string | null
+}
+
+export async function fetchDatabaseHealth(): Promise<DatabaseHealthResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/v1/db/health`, {
+    headers: {
+      'Accept': 'application/json',
+    },
+  })
+  if (!response.ok) {
+    throw new Error(`Database health check failed with status: ${response.status} ${response.statusText}`)
+  }
+  return response.json()
+}
+
+
 export async function fetchBackendInfo(): Promise<BackendAppInfoResponse> {
   const response = await fetch(`${API_BASE_URL}/api/v1/info`, {
     headers: {

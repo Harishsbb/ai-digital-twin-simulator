@@ -250,6 +250,13 @@ class SensorDataSimulator:
         while True:
             try:
                 reading = self.step()
+                # Non-blocking async database write without delaying the WebSocket stream
+                try:
+                    from app.db.repositories import AsyncPersistenceManager
+                    AsyncPersistenceManager.schedule_reading_persistence(reading)
+                except Exception as db_err:
+                    logger.debug(f"Persistence dispatch skipped: {db_err}")
+
                 await self.broadcast(reading)
                 await asyncio.sleep(self.config.update_interval_sec)
             except asyncio.CancelledError:

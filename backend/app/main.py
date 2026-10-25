@@ -46,16 +46,19 @@ async def root():
     return {
         "service": settings.app_name,
         "version": settings.app_version,
-        "stage": "Step 5: Sensor Data Simulator",
+        "stage": "Step 12: Supabase PostgreSQL Database Integration",
         "status": "online",
         "docs_url": "/docs",
         "health_check": "/api/health",
+        "db_health": "/api/v1/db/health",
         "app_info": "/api/v1/info",
         "sensors_latest": "/api/v1/sensors/latest",
         "sensors_ws": "/api/v1/sensors/ws",
         "ai_status": "/api/v1/ai/status",
         "ai_latest": "/api/v1/ai/latest",
         "ai_metrics": "/api/v1/ai/metrics",
+        "db_alerts": "/api/v1/db/alerts",
+        "db_whatif_experiments": "/api/v1/db/whatif/experiments",
     }
 
 

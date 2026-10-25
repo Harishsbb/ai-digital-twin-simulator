@@ -109,63 +109,14 @@ export function getSensorWebSocketUrl(): string {
   return `${wsProtocol}//${url.host}/api/v1/sensors/ws`
 }
 
-import type {
-  AIModelMetricsResponse,
-  AIModelStatusResponse,
-  AnomalyPredictionInput,
-  AnomalyPredictionResponse,
-} from '../types'
+export {
+  AIError,
+  fetchAIMetrics,
+  fetchAILatest,
+  fetchAIStatus,
+  interpretAnomalyScore,
+  predictAnomaly,
+} from './aiApi.ts'
+export type { RequestOptions } from './aiApi.ts'
 
-export async function fetchAIStatus(): Promise<AIModelStatusResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/v1/ai/status`, {
-    headers: {
-      'Accept': 'application/json',
-    },
-  })
-  if (!response.ok) {
-    throw new Error(`Failed to fetch AI status: ${response.status} ${response.statusText}`)
-  }
-  return response.json()
-}
-
-export async function predictAnomaly(
-  input: AnomalyPredictionInput
-): Promise<AnomalyPredictionResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/v1/ai/predict`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-    body: JSON.stringify(input),
-  })
-  if (!response.ok) {
-    throw new Error(`Failed to run AI prediction: ${response.status} ${response.statusText}`)
-  }
-  return response.json()
-}
-
-export async function fetchAILatest(): Promise<AnomalyPredictionResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/v1/ai/latest`, {
-    headers: {
-      'Accept': 'application/json',
-    },
-  })
-  if (!response.ok) {
-    throw new Error(`Failed to fetch latest AI prediction: ${response.status} ${response.statusText}`)
-  }
-  return response.json()
-}
-
-export async function fetchAIMetrics(): Promise<AIModelMetricsResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/v1/ai/metrics`, {
-    headers: {
-      'Accept': 'application/json',
-    },
-  })
-  if (!response.ok) {
-    throw new Error(`Failed to fetch AI metrics: ${response.status} ${response.statusText}`)
-  }
-  return response.json()
-}
 

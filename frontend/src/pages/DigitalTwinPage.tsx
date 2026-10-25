@@ -1,12 +1,15 @@
 import React, { useMemo, useState } from 'react'
-import { Box, Layers, ChevronDown } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Box, Layers, ChevronDown, AlertOctagon } from 'lucide-react'
 import { MotorViewportCard } from '../components/twin/MotorViewportCard'
 import { ComponentDetailsCard } from '../components/twin/ComponentDetailsCard'
 import { ViewModeSelectorCard } from '../components/twin/ViewModeSelectorCard'
 import { StatusSelectorCard } from '../components/twin/StatusSelectorCard'
 import { ControlsHelpCard } from '../components/twin/ControlsHelpCard'
+import { AIStatusBadge } from '../components/ai'
 import { getComponentById } from '../data/motorComponents'
 import { useSensorStream } from '../context/useSensorStream'
+import { useAIPrediction } from '../context/useAIPrediction'
 import { evaluateMachineStatusFromSensors } from '../utils/motorTelemetryMath'
 import type { LiveMotorTelemetry, TwinViewMode, TwinViewOptions, TwinVisualStatus } from '../types'
 
@@ -21,6 +24,14 @@ export const DigitalTwinPage: React.FC = () => {
     controlSimulator,
     toggleMode,
   } = useSensorStream()
+
+  // Step 8: Live AI Anomaly Detection State
+  const {
+    isAnomaly,
+    anomalyScore,
+    isModelReady,
+    latestPrediction,
+  } = useAIPrediction()
 
   // Machine Status State (defaults to live evaluated telemetry status, can be manually tested)
   const [manualStatus, setManualStatus] = useState<TwinVisualStatus | null>(null)
@@ -129,6 +140,15 @@ export const DigitalTwinPage: React.FC = () => {
 
         {/* Right: Quick Telemetry Status Pills */}
         <div className="flex flex-wrap items-center gap-3">
+          {/* AI Status Badge */}
+          <Link
+            to="/anomaly-detection"
+            className="cursor-pointer transition-transform hover:scale-102"
+            title="Inspect AI Anomaly Detection Engine & Diagnostics"
+          >
+            <AIStatusBadge showScore={true} />
+          </Link>
+
           {/* Exploded / Assembled View Toggle Button */}
           <button
             type="button"
@@ -188,6 +208,28 @@ export const DigitalTwinPage: React.FC = () => {
         </div>
       </div>
 
+      {/* Subtle AI Anomaly Notification Ribbon (when anomaly is detected) */}
+      {isModelReady && isAnomaly && (
+        <div className="p-3.5 px-4 rounded-2xl bg-[#FEF2F2] border border-[#FECACA] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 text-xs text-[#991B1B] animate-in fade-in duration-200 shadow-2xs">
+          <div className="flex items-center gap-2.5">
+            <AlertOctagon className="w-4 h-4 text-[#EF4444] shrink-0" />
+            <div>
+              <span className="font-bold">Isolation Forest Anomaly Alert:</span>{' '}
+              <span className="font-mono font-semibold">
+                Score {anomalyScore !== null ? (anomalyScore >= 0 ? `+${anomalyScore.toFixed(4)}` : anomalyScore.toFixed(4)) : 'N/A'}
+              </span>{' '}
+              — {latestPrediction?.diagnostic_context?.summary || 'Telemetry vector partitioned into low-density anomaly region.'}
+            </div>
+          </div>
+          <Link
+            to="/anomaly-detection"
+            className="underline font-bold text-[#DC2626] hover:text-[#7F1D1D] shrink-0 text-xs self-end sm:self-auto"
+          >
+            Inspect AI Insights &rarr;
+          </Link>
+        </div>
+      )}
+
       {/* ========================================================= */}
       {/* 2. MAIN 3D MOTOR VIEWPORT & COMPONENT DETAILS PANEL       */}
       {/* ========================================================= */}
@@ -209,6 +251,8 @@ export const DigitalTwinPage: React.FC = () => {
             currentMode={currentMode}
             onControl={controlSimulator}
             onToggleMode={toggleMode}
+            isAiAnomaly={isModelReady ? isAnomaly : undefined}
+            aiAnomalyScore={isModelReady ? anomalyScore : undefined}
           />
         </div>
 

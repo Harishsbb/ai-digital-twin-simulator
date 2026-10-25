@@ -5,7 +5,8 @@ evaluation on a held-out dataset containing both normal and distinct fault scena
 Persists the trained model artifact and evaluation metadata to disk.
 """
 
-from typing import Any, Dict
+from pathlib import Path
+from typing import Any, Dict, Optional
 import numpy as np
 from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_score
 
@@ -26,6 +27,7 @@ def train_and_evaluate(
     eval_seed: int = 999,
     contamination: float = 0.03,
     n_estimators: int = 150,
+    artifacts_dir: Optional[Path] = None,
 ) -> Dict[str, Any]:
     """Train Isolation Forest on normal baseline telemetry and evaluate against held-out scenarios."""
     print("=" * 70)
@@ -163,6 +165,7 @@ def train_and_evaluate(
         detector=detector,
         evaluation_metrics=evaluation_summary,
         training_sample_count=n_train_samples,
+        artifacts_dir=artifacts_dir,
     )
     print(f"\nArtifacts persisted:")
     print(f"  Model:    {model_path}")

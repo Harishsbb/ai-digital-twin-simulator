@@ -38,6 +38,8 @@ interface MotorViewportCardProps {
   currentMode?: SimulatorMode
   onControl?: (action: SimulatorAction, mode?: SimulatorMode) => Promise<void>
   onToggleMode?: () => Promise<void>
+  isAiAnomaly?: boolean
+  aiAnomalyScore?: number | null
 }
 
 export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
@@ -55,6 +57,8 @@ export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
   currentMode = 'normal',
   onControl,
   onToggleMode,
+  isAiAnomaly,
+  aiAnomalyScore,
 }) => {
   const sceneRef = useRef<MotorSceneHandle>(null)
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false)
@@ -81,11 +85,12 @@ export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
     section: { label: 'Section View', icon: Scissors },
   }
 
-
   return (
     <div
       ref={containerRef}
-      className={`rounded-2xl bg-white overflow-hidden relative shadow-[0_4px_20px_rgba(16,33,61,0.04)] transition-all border border-[#DFE7F3] ${
+      className={`rounded-2xl bg-white overflow-hidden relative shadow-[0_4px_20px_rgba(16,33,61,0.04)] transition-all border ${
+        isAiAnomaly ? 'border-[#FECACA] ring-1 ring-[#EF4444]/20' : 'border-[#DFE7F3]'
+      } ${
         isFullscreen ? 'fixed inset-0 z-50 rounded-none' : 'h-[540px] lg:h-[620px]'
       }`}
     >
@@ -93,7 +98,7 @@ export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
       {/* TOP HEADER CONTROLS (Matching Reference Image)            */}
       {/* ========================================================= */}
       <div className="absolute top-4 left-5 right-5 z-20 flex items-center justify-between pointer-events-none">
-        {/* Left: 3D Motor View Title */}
+        {/* Left: 3D Motor View Title & Optional AI Indicator */}
         <div className="flex items-center gap-2 pointer-events-auto">
           <div className="w-7 h-7 rounded-lg bg-[#EAF2FF] border border-[#BFDBFE] flex items-center justify-center text-[#1769FF] shadow-xs">
             <Box className="w-4 h-4" />
@@ -101,6 +106,32 @@ export const MotorViewportCard: React.FC<MotorViewportCardProps> = ({
           <span className="text-sm font-bold text-[#10213D] tracking-tight">
             3D Motor View
           </span>
+          {isAiAnomaly !== undefined && (
+            <div
+              className={`hidden sm:flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border text-[11px] font-bold font-mono transition-all ${
+                isAiAnomaly
+                  ? 'bg-[#FEF2F2] text-[#DC2626] border-[#FECACA]'
+                  : 'bg-[#ECFDF5] text-[#065F46] border-[#A7F3D0]'
+              }`}
+              title={
+                aiAnomalyScore !== null && aiAnomalyScore !== undefined
+                  ? `Isolation Forest Decision Score: ${aiAnomalyScore >= 0 ? '+' : ''}${aiAnomalyScore.toFixed(4)}`
+                  : undefined
+              }
+            >
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  isAiAnomaly ? 'bg-[#EF4444]' : 'bg-[#10B981]'
+                }`}
+              />
+              <span>{isAiAnomaly ? 'AI: Anomaly' : 'AI: Inlier'}</span>
+              {aiAnomalyScore !== null && aiAnomalyScore !== undefined && (
+                <span className="opacity-75">
+                  ({aiAnomalyScore >= 0 ? '+' : ''}{aiAnomalyScore.toFixed(2)})
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Right Action Controls: View Mode Dropdown, Active Pill, Reset, Fullscreen */}

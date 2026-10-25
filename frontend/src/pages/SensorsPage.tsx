@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   Activity,
   AlertOctagon,
@@ -15,6 +16,7 @@ import {
 } from 'lucide-react'
 import { Card } from '../components/Card'
 import { StatusBadge } from '../components/StatusBadge'
+import { AIStatusBadge } from '../components/ai'
 import { useSensorStream } from '../context/useSensorStream'
 import type { SimulatorAction } from '../types'
 
@@ -104,6 +106,15 @@ export const SensorsPage: React.FC = () => {
 
         {/* Right Actions: WebSocket Status & Simulation Controls */}
         <div className="flex flex-wrap items-center gap-2.5">
+          {/* AI Anomaly Detection Status Badge */}
+          <Link
+            to="/anomaly-detection"
+            className="cursor-pointer transition-transform hover:scale-102"
+            title="Inspect AI Anomaly Detection Engine & Diagnostics"
+          >
+            <AIStatusBadge showScore={true} />
+          </Link>
+
           {/* WebSocket Status Indicator */}
           <div
             className={`flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-semibold transition-all ${

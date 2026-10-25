@@ -332,6 +332,7 @@ def test_train_pipeline_end_to_end(tmp_path: Path):
         train_seed=123,
         eval_seed=456,
         n_estimators=25,
+        artifacts_dir=tmp_path,
     )
 
     assert "confusion_matrix" in summary
@@ -339,6 +340,8 @@ def test_train_pipeline_end_to_end(tmp_path: Path):
     assert summary["accuracy"] >= 0.85
     assert "normal" in summary["scenario_breakdown"]
     assert "overheating" in summary["scenario_breakdown"]
+    assert (tmp_path / "isolation_forest_v1.joblib").exists()
+    assert (tmp_path / "isolation_forest_v1_metadata.json").exists()
 
 
 def test_corrupted_model_file_handling(tmp_path: Path):

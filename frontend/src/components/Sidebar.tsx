@@ -4,6 +4,7 @@ import {
   Activity,
   AlertTriangle,
   BarChart2,
+  BookOpen,
   Box,
   Brain,
   Home,
@@ -53,6 +54,11 @@ const navItems = [
     name: 'What-If Simulation',
     path: '/what-if',
     icon: Sparkles,
+  },
+  {
+    name: 'User Manual',
+    path: '/user-manual',
+    icon: BookOpen,
   },
   {
     name: 'Settings',

@@ -4,7 +4,10 @@ import sys
 
 # Auto-switch to virtual environment if available and not already active
 backend_dir = os.path.dirname(os.path.abspath(__file__))
-venv_python = os.path.join(backend_dir, "venv", "Scripts", "python.exe")
+# Check Windows Scripts or Unix bin
+venv_python_win = os.path.join(backend_dir, "venv", "Scripts", "python.exe")
+venv_python_nix = os.path.join(backend_dir, "venv", "bin", "python")
+venv_python = venv_python_win if os.path.exists(venv_python_win) else venv_python_nix
 
 if (
     os.path.exists(venv_python)
@@ -21,11 +24,16 @@ sys.path.insert(0, backend_dir)
 import uvicorn
 
 if __name__ == "__main__":
+    host = os.getenv("HOST", "0.0.0.0")
+    port = int(os.getenv("PORT", "8000"))
+    is_dev = os.getenv("ENVIRONMENT", "development").lower() != "production"
+
     print("=" * 60)
     print("  AI Digital Twin Simulator - Backend API Server")
-    print("  URL: http://127.0.0.1:8000")
-    print("  Docs: http://127.0.0.1:8000/docs")
-    print("  WebSocket: ws://127.0.0.1:8000/api/v1/sensors/ws")
+    print(f"  URL: http://{host}:{port}")
+    print(f"  Docs: http://{host}:{port}/docs")
+    print(f"  WebSocket: ws://{host}:{port}/api/v1/sensors/ws")
+    print(f"  Environment: {'development (auto-reload)' if is_dev else 'production'}")
     print("=" * 60)
-    uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("app.main:app", host=host, port=port, reload=is_dev)
 

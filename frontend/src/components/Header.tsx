@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Bell,
+  BookOpen,
   ChevronDown,
   Menu,
   Search,
@@ -80,6 +81,17 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
 
       {/* Right Actions: System Status, Notifications, Profile */}
       <div className="flex items-center gap-3 sm:gap-4">
+        {/* User Manual Button */}
+        <Link
+          to="/user-manual"
+          id="user-manual-header-btn"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#DFE7F3] text-xs font-semibold text-[#10213D] hover:text-[#1769FF] hover:border-[#1769FF]/50 hover:bg-[#F8FAFC] transition-all shadow-xs cursor-pointer"
+          title="Open User Manual & Operator Guide"
+        >
+          <BookOpen className="w-4 h-4 text-[#1769FF]" />
+          <span className="hidden sm:inline">User Manual</span>
+        </Link>
+
         {/* System Online Status Pill */}
         <button
           onClick={checkHealth}

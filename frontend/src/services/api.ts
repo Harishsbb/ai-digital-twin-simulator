@@ -135,9 +135,9 @@ export async function controlSimulator(
 }
 
 export function getSensorWebSocketUrl(): string {
-  const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-  // Default to backend on port 8000
   const url = new URL(API_BASE_URL)
+  const isSecure = url.protocol === 'https:' || (typeof window !== 'undefined' && window.location?.protocol === 'https:')
+  const wsProtocol = isSecure ? 'wss:' : 'ws:'
   return `${wsProtocol}//${url.host}/api/v1/sensors/ws`
 }
 

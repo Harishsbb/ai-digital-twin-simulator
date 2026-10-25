@@ -27,10 +27,11 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Configure CORS restricted strictly to the local Vite development origin
+# Configure CORS for local development and deployed frontend origins (Vercel)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.frontend_origin],
+    allow_origins=settings.get_cors_origins(),
+    allow_origin_regex=settings.cors_allow_origin_regex,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],

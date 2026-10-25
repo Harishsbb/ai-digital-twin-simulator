@@ -5,6 +5,20 @@ import * as THREE from 'three'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { IndustrialMotor } from './IndustrialMotor'
 import type { LiveMotorTelemetry, TwinViewOptions, TwinVisualStatus } from '../../types'
+import {
+  DEFAULT_CAMERA_POS,
+  DEFAULT_TARGET,
+  DEFAULT_FOV,
+  ORBIT_MIN_DISTANCE,
+  ORBIT_MAX_DISTANCE,
+  ORBIT_DAMPING_FACTOR,
+  SHADOW_SCALE,
+  SHADOW_OPACITY,
+  SHADOW_BLUR,
+  SHADOW_ELEVATION,
+} from '../../utils/motorCameraConfig'
+
+export { DEFAULT_CAMERA_POS, DEFAULT_TARGET, DEFAULT_FOV }
 
 export interface MotorSceneHandle {
   resetCamera: () => void
@@ -17,10 +31,6 @@ interface MotorSceneProps {
   onSelectComponent?: (componentId: string) => void
   liveTelemetry?: LiveMotorTelemetry | null
 }
-
-// Camera positioned at the user-specified 3/4 angle and size
-const DEFAULT_CAMERA_POS: [number, number, number] = [-3.45, 1.95, 3.45]
-const DEFAULT_TARGET: [number, number, number] = [0.08, 0.08, 0.05]
 
 export const MotorScene = forwardRef<MotorSceneHandle, MotorSceneProps>(
   ({ status, options, selectedComponentId, onSelectComponent, liveTelemetry }, ref) => {
@@ -53,7 +63,7 @@ export const MotorScene = forwardRef<MotorSceneHandle, MotorSceneProps>(
           <PerspectiveCamera
             makeDefault
             position={DEFAULT_CAMERA_POS}
-            fov={38}
+            fov={DEFAULT_FOV}
             near={0.1}
             far={100}
           />
@@ -62,9 +72,9 @@ export const MotorScene = forwardRef<MotorSceneHandle, MotorSceneProps>(
             ref={controlsRef}
             makeDefault
             enableDamping
-            dampingFactor={0.06}
-            minDistance={2.0}
-            maxDistance={10}
+            dampingFactor={ORBIT_DAMPING_FACTOR}
+            minDistance={ORBIT_MIN_DISTANCE}
+            maxDistance={ORBIT_MAX_DISTANCE}
             maxPolarAngle={Math.PI / 2 + 0.02} // Prevent camera from dipping beneath floor
             autoRotate={options.autoRotate}
             autoRotateSpeed={options.rotationSpeed * 1.5}
@@ -124,10 +134,10 @@ export const MotorScene = forwardRef<MotorSceneHandle, MotorSceneProps>(
 
           {/* Clean Studio Floor Shadow */}
           <ContactShadows
-            position={[0, -1.215, 0]}
-            opacity={0.35}
-            scale={7.5}
-            blur={1.8}
+            position={[0, SHADOW_ELEVATION, 0]}
+            opacity={SHADOW_OPACITY}
+            scale={SHADOW_SCALE}
+            blur={SHADOW_BLUR}
             far={2.5}
             color="#334155"
           />

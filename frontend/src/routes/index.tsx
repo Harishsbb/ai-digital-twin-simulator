@@ -9,6 +9,7 @@ import { AlertsPage } from '../pages/AlertsPage'
 import { AnalyticsPage } from '../pages/AnalyticsPage'
 import { WhatIfSimulationPage } from '../pages/WhatIfSimulationPage'
 import { SettingsPage } from '../pages/SettingsPage'
+import { UserManualPage } from '../pages/UserManualPage'
 import { NotFoundPage } from '../pages/NotFoundPage'
 
 export const AppRoutes: React.FC = () => {
@@ -26,6 +27,9 @@ export const AppRoutes: React.FC = () => {
         <Route path="/analytics" element={<AnalyticsPage />} />
         <Route path="/what-if" element={<WhatIfSimulationPage />} />
         <Route path="/whatif" element={<Navigate to="/what-if" replace />} />
+        <Route path="/user-manual" element={<UserManualPage />} />
+        <Route path="/manual" element={<Navigate to="/user-manual" replace />} />
+        <Route path="/guide" element={<Navigate to="/user-manual" replace />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/404" element={<NotFoundPage />} />
         <Route path="*" element={<Navigate to="/404" replace />} />

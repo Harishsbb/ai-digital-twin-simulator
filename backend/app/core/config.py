@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     host: str = "0.0.0.0"
     port: int = 8000
     frontend_origin: str = "http://localhost:5173"
+    cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
+    cors_allow_origin_regex: Optional[str] = r"^https://.*\.vercel\.app$"
 
     # Database Configuration (Supabase PostgreSQL Session Pooler)
     database_url: Optional[str] = None
@@ -67,6 +69,17 @@ class Settings(BaseSettings):
             return "Not Configured"
         # Mask password using regex
         return re.sub(r":([^:@]+)@", r":****@", raw_url)
+
+    def get_cors_origins(self) -> list[str]:
+        """Return list of allowed CORS origins combining frontend_origin and cors_origins."""
+        origins: set[str] = set()
+        for field in (self.frontend_origin, self.cors_origins):
+            if field and field.strip():
+                for item in field.split(","):
+                    cleaned = item.strip().rstrip("/")
+                    if cleaned:
+                        origins.add(cleaned)
+        return sorted(list(origins))
 
 
 @lru_cache
